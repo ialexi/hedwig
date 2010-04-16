@@ -13,7 +13,10 @@
   font-size: 16px;
 }
 .sc-theme .sc-view.ace.light.pig.sc-collection-view.sc-list-view.sc-source-list.desk .disclosure { display: none; }
-.sc-theme .sc-view.ace.light.pig.sc-static-content-view { padding: 1em; }
+.sc-theme .sc-view.ace.light.pig.sc-static-content-view .article {
+  padding: 3em;
+  padding-top: 100px;
+}
 .sc-theme .sc-view.ace.light.pig.sc-toolbar-view .sc-label-view {
   font-size: 20px;
   color: #aaaaaa;

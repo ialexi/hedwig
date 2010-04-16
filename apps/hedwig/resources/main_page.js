@@ -184,7 +184,7 @@ Hedwig.mainPage = SC.Page.design({
           contentView: SC.ScrollView.design({
             borderStyle: SC.BORDER_NONE,
             contentView: SC.StaticContentView.design({
-              contentBinding: "Hedwig.articleController.contents",
+              contentBinding: "Hedwig.articleController.html",
               contentDidChange: function() {
                 sc_super();
                 this.invokeLater("processContent", 1);

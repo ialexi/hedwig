@@ -15,6 +15,10 @@ Hedwig.articleController = SC.ObjectController.create(
   contentBinding: "Hedwig.guideBrowserController.selection",
   contentBindingDefault: SC.Binding.single(),
   
+  html: function() {
+    return "<div class='article'>" + (this.get("contents") || "") + "</div>";
+  }.property("contents").cacheable(),
+  
   toolbarShouldShow: YES,
   toggleToolbar: function() {
     this.set("toolbarShouldShow", !this.get("toolbarShouldShow"));
@@ -27,9 +31,5 @@ Hedwig.articleController = SC.ObjectController.create(
   
   replacementFor: function(href) {
     return "<div class='hedwig-demo' href='" + href + "' style=''></div>";
-  },
-  
-  openDemo: function(href) {
-    console.error("DEMO: " + href);
   }
 }) ;
