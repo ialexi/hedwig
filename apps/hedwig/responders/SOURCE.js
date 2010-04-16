@@ -1,7 +1,7 @@
 /*global Hedwig */
-require("responders/NORMAL");
+require("responders/DEMO");
 Hedwig.SOURCE = SC.Responder.create({
-  nextResponder: Hedwig.NORMAL,
+  nextResponder: Hedwig.DEMO,
   didBecomeFirstResponder: function() {
     Hedwig.demoController.openSource();
   },
@@ -11,7 +11,8 @@ Hedwig.SOURCE = SC.Responder.create({
   },
   
   closeSource: function() {
-    Hedwig.makeFirstResponder(Hedwig.NORMAL);
+    Hedwig.makeFirstResponder(Hedwig.DEMO);
+    Hedwig.invokeLater("sendAction", 150, "closeDemo");
   },
   
   showDemo: function() {

@@ -19,7 +19,13 @@ Hedwig.demoController = SC.ObjectController.create(
     return Hedwig.articleController.demoFor(this.get("demo"));
   }.property("demo").cacheable(),
   
+  nowShowing: "front",
   openDemo: function() {
+    this.set("nowShowing", "front");
+    if (this._openDemoPanel) {
+      return; // in this case, we've done everything we need.
+    }
+    
     try {
       var source = this.get("ex");
       
@@ -41,17 +47,16 @@ Hedwig.demoController = SC.ObjectController.create(
   
   closeDemo: function() {
     this._openDemoPanel.remove();
+    this._openDemoPanel = null;
   },
   
   openSource: function() {
-    var sourcePanel = Hedwig.SourcePanel.create();
-    sourcePanel.append();
-    this._openSourcePanel = sourcePanel;
+    this.set("nowShowing", "back");
   },
   
   closeSource: function() {
     console.error("WHY MUST YOU INSIST ON CLOSING THE SOURCE CODE! IT IS AGAINST EVERYTHING I BELIEVE IN! I'M GONNA CRY!");
-    this._openSourcePanel.remove();
+    this.set("nowShowing", "front");
   },
   
   preparedSource: function() {

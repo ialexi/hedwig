@@ -12,6 +12,53 @@
 */
 Hedwig.DemoPanel = SC.PanelPane.extend(SC.Animatable,
 /** @scope Hedwig.DemoPanel.prototype */ {
+  modalPane: SC.ModalPane.extend(SC.Animatable, {
+    classNames: 'for-sc-panel',
+    transitions: {
+      opacity: 0.25
+    },
+    style: {opacity: 0.0 }
+  }),
+  
+  transitions: { 
+    transform: { 
+      duration: 0.5, 
+      timing: SC.Animatable.TRANSITION_EASE_IN_OUT
+    },
+    opacity: { 
+      duration: 0.5, 
+      timing: SC.Animatable.TRANSITION_EASE_IN_OUT,
+      action: function(){ 
+        if (this.style.opacity === 0) this._call_when_done();
+      } 
+    }
+  },
+  style: { opacity: 0.0, transform: "scale3d(.1,.1,1)" },
+  layout: { width: 250, height: 480 },
+  theme: "popover",
+  
+  append: function() {
+    sc_super();
+    this.invokeLater("sizeUp", 1);
+  },
+  
+  sizeUp: function() {
+    this.adjust({
+      opacity: 1,
+      transform: "scale3d(1,1,1)"
+    });
+    this.modalPane.adjust("opacity", 0.50);
+  },
+  
+  remove: function() {
+    this._call_when_done = arguments.callee.base;
+    this.adjust({
+      opacity: 0,
+      transform: "scale3d(.1,.1,1)"
+    });
+    this.modalPane.adjust("opacity", 0);
+  },
+  
   classNames: "demo".w(),
   
   defaultResponder: Hedwig,
@@ -26,12 +73,6 @@ Hedwig.DemoPanel.generateWithView = function(view) {
       childViews: "front back".w(),
       init: function() {
         sc_super();
-        SC.Timer.schedule({
-          interval: 1000,
-          target: this,
-          action: "flip",
-          repeats: YES
-        });
         
         if (SC.Animatable.enableCSS3DTransforms) {
           this.back.flip(180, YES);
@@ -40,6 +81,7 @@ Hedwig.DemoPanel.generateWithView = function(view) {
         }
       },
       
+      nowShowingBinding: "Hedwig.demoController.nowShowing",      
       nowShowing: "none",
       flip: function() {
         if (this.get("nowShowing") == "back") this.set("nowShowing", "front");
@@ -71,7 +113,7 @@ Hedwig.DemoPanel.generateWithView = function(view) {
         classNames: "flippable".w(),
         transitions: {
           "transform": {
-            "duration": 0.5, timing: SC.Animatable.TRANSITION_EASE_IN_OUT
+            "duration": 0.6, timing: SC.Animatable.TRANSITION_EASE_IN_OUT
           }
         },
         style: {
