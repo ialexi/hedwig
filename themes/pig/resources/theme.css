@@ -57,3 +57,48 @@
   background: white;
   -webkit-box-shadow: 0px 5px 25px white;
 }
+.sc-theme .sc-view.ace.light.pig.sc-toolbar-view { -webkit-box-shadow: none; }
+.hedwig-demo {
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 150px;
+  border: 1px solid gray;
+}
+h1 { color: #46468c; }
+.sc-theme .sc-view.ace.light.pig.sc-scroll-view.source {
+  background-color: white;
+  -webkit-transform: translate3d(0px,0px,0px);
+}
+.sc-theme .sc-view.ace.light.pig.sc-scroll-view.source .sc-container-view { -webkit-transform: translate3d(0px,0px,0px); }
+.sc-theme .sc-view.ace.light.pig.sc-scroll-view.source .sc-container-view .sc-static-content-view { -webkit-transform: translate3d(0px,0px,0px); }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source {
+  font-size: 14px;
+  white-space: pre;
+  padding: 0px;
+  margin: 0px;
+}
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .line-numbers {
+  text-align: right;
+  padding-right: 5px;
+  bottom: 0px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 50px;
+  background-color: #eeeeee;
+  color: #cccccc;
+}
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .line-numbers span { display: block; }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code { margin-left: 65px; }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code .class { color: #000096; }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code .comment { color: #6496c8; }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code .string { color: #00640a; }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code .number { color: #0000ff; }
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code .keyword {
+  color: #196e19;
+  font-weight: bold;
+}
+.sc-theme .sc-view.ace.light.pig.sc-static-layout.source .code .this {
+  color: #196e19;
+  font-weight: bold;
+}

@@ -1,0 +1,45 @@
+@view(sc-scroll-view).source {
+  background-color: white;
+  -webkit-transform: translate3d(0px,0px,0px);
+  
+  .sc-container-view {
+    -webkit-transform: translate3d(0px,0px,0px);
+    .sc-static-content-view {
+      -webkit-transform: translate3d(0px,0px,0px);
+    }
+  }
+}
+
+@view(sc-static-layout).source {
+  font-size: 14px;
+  white-space: pre;
+  padding: 0px;
+  margin: 0px;
+  
+  .line-numbers {
+    text-align: right;
+    padding-right: 5px;
+    bottom: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 50px;
+    background-color:#eee;
+    color: #ccc;
+    
+    span {
+      display:block;
+    }
+  }
+  
+  .code {
+    margin-left: 65px;
+    
+    .class { color: rgb(0, 0, 150); }
+    /*code .variable { color: rgb(10, 70, 10); }*/
+    .comment { color: rgb(100, 150, 200); }
+    .string { color: rgb(0, 100, 10); }
+    .number { color: rgb(0, 0, 255); }
+    .keyword, .this { color: rgb(25, 110, 25); font-weight: bold; }
+  }
+}
