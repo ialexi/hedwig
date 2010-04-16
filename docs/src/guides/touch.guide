@@ -1,0 +1,26 @@
+{
+  "title": "Writing Touch Applications",
+  "sections": [
+    {
+      "title": "Introduction",
+      "articles": [
+        "articles/touch/a-brief-touch",
+        "articles/touch/touch-events"
+      ]
+    },
+    {
+      "title": "Built-In Support",
+      "articles": [
+        "articles/controls/button/touch",
+        "articles/controls/scroll/touch"
+      ]
+    },
+    {
+      "title": "Advanced Concepts",
+      "articles": [
+        "articles/touch/capturing",
+        "articles/touch/releasing"
+      ]
+    }
+  ]
+}

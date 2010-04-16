@@ -1,0 +1,38 @@
+@theme(chromeless)
+@view(sc-button-view) label.sc-button-label {
+  margin-top: -11px;
+  font-size: 16px;
+  color: #bbb;
+}
+
+@view(sc-button-view).active label.sc-button-label {
+  color: #777;
+}
+@end
+
+@theme(icon)
+@view(sc-button-view) {
+  opacity: .3;
+}
+
+@view(sc-button-view).active {
+  opacity: 1.0;
+}
+
+.sc-button-view .previous {
+  position: absolute;
+  top: 50%; left: 50%;
+  margin-top: -10px; margin-left: -10px;
+  width: 20px; height: 20px;
+  background: sprite(previous.png);
+}
+
+.sc-button-view .next {
+  position: absolute;
+  top: 50%; left: 50%;
+  margin-top: -10px; margin-left: -10px;
+  margin-top: -10px;
+  width: 20px; height: 20px;
+  background: sprite(next.png);
+}
+@end

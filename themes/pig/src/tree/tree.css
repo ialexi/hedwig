@@ -1,0 +1,21 @@
+@view(sc-collection-view.sc-list-view.sc-source-list).desk {
+  background: sprite("bg.png" repeat-y);
+  z-index: 0;
+  -webkit-transform: translate3d(0px,0px,0px);
+}
+
+@view(sc-collection-view.sc-list-view.sc-source-list) .sc-list-item-view label {
+  color: rgb(100,100,100);
+  font-size: 16px;
+}
+
+@view(sc-collection-view.sc-list-view.sc-source-list) .sc-list-item-view.sel label {
+  color: white;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+
+@view(sc-collection-view.sc-list-view.sc-source-list).desk .disclosure {
+  display: none;
+}
