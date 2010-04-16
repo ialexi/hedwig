@@ -39,7 +39,17 @@ Hedwig.mainPage = SC.Page.design({
         classNames: ["paper-view"],
         theme: "paper",
         childViews: "contentView topToolbar".w(),
+        
+        // update master hidden status since we are doing this manually...
+        masterIsHidden: NO,
+        masterIsHiddenDidChange: function() { 
+          console.error("MHDC");
+          this.topToolbar.set("masterIsHidden", this.get("masterIsHidden"));
+        }.observes("masterIsHidden"),
+        
         topToolbar: SC.ToolbarView.design(SC.Animatable, SC.FlowedLayout, {
+          masterIsHidden: NO,
+          
           layout: { top: 0, right: 0, left: 0, height: 44 },
           
           style: {
