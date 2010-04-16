@@ -35,9 +35,40 @@ Hedwig.mainPage = SC.Page.design({
         })
       }),
       
-      detailView: SC.WorkspaceView.design({
+      detailView: SC.View.design({
+        classNames: ["paper-view"],
         theme: "paper",
-        topToolbar: SC.ToolbarView.design(SC.FlowedLayout, {
+        childViews: "contentView topToolbar".w(),
+        topToolbar: SC.ToolbarView.design(SC.Animatable, SC.FlowedLayout, {
+          layout: { top: 0, right: 0, left: 0, height: 44 },
+          
+          style: {
+            display: "block",
+            opacity: 0.9
+          },
+          transitions: {
+            display: 0.2,
+            opacity: 0.1
+          },
+          
+          isShowing: YES,
+          isShowingBinding: "Hedwig.articleController.toolbarShouldShow",
+          isShowingDidChange: function() {
+            if (this.get("isShowing")) {
+              this.disableAnimation();
+              this.adjust({
+                opacity: 0.9,
+                display: "block"
+              }).updateStyle();
+              this.enableAnimation();
+            } else {
+              this.adjust({
+                opacity: 0.0,
+                display: "none"
+              }).updateStyle();
+            }
+          }.observes("isShowing"),
+          
           autoResize: NO,
           flowPadding: {top:0,bottom:0,right:10,left:10},
           childViews: "title previous guide space next".w(),
@@ -76,42 +107,121 @@ Hedwig.mainPage = SC.Page.design({
           
         }),
         
-        contentView: SC.ScrollView.design({
-          borderStyle: SC.BORDER_NONE,
-          contentView: SC.StaticContentView.design({
-            contentBinding: "Hedwig.articleController.contents",
-            contentDidChange: function() {
-              sc_super();
-              this.invokeLater("processContent", 1);
-            }.observes("content"),
+        contentView: SC.View.design({
+          childViews: "contentView".w(),
+          
+          /**
+            touchGestures: Gestures dealing with single touches.
+          */
+          touchGestures: {
+            "tap": { minX: 0, maxX: 3 },
+            "drag": {minX: 5, maxX: 20},
+            "swipe": { minX: 20 },
+            "RELEASE": { minY: 10 }
+          },
+          
+          captureTouch: function() {
+            return NO;
+          },
+          
+          /**
+            Maps a delta to gestures 
+          */
+          mapDelta: function(deltaX, deltaY) {
+            var key, gesture, gestures = this.get("touchGestures"), inGesture;
+            var ret = {};
             
-            processContent: function() {
-              var d = this.$("a.demo").forEach(function(x) {
-                x.outerHTML = Hedwig.articleController.replacementFor(x.getAttribute("href"));
-              }, this);
-            },
-            touchStart: function(touch) { this.mouseDown(touch); },
-            mouseDown: function(evt) {
-              evt.preventDefault();
+            // loop through and evaluate
+            for (key in gestures) {
+              gesture = this.touchGestures[key]; inGesture = YES;
               
-              var el = document.elementFromPoint(evt.pageX, evt.pageY), demoNode = null;
-              while (el) {
-                if (SC.$(el).hasClass("sc-view")) break;
-                if (SC.$(el).hasClass("hedwig-demo")) {
-                  demoNode = el;
-                  break;
-                }
-                el = el.parentNode;
-              }
+              if ("minX" in gesture && deltaX < gesture.minX) inGesture = NO;
+              if ("minY" in gesture && deltaY < gesture.minY) inGesture = NO;
+              if ("maxX" in gesture && deltaX > gesture.maxX) inGesture = NO;
+              if ("maxY" in gesture && deltaY > gesture.maxY) inGesture = NO;
               
-              if (demoNode) {
-                Hedwig.sendAction("openDemo", demoNode.getAttribute("href"));
-              }
+              ret[key] = inGesture;
             }
+            
+            return ret;            
+          },
+          
+          /**
+            Finds out what gestures this touch could qualify for
+          */
+          mapTouch: function(touch) {
+            // calculate deltaX/Y (should we cache our own versions, by any chance?)
+            var deltaX = Math.abs(touch.pageX - touch.startX),
+                deltaY = Math.abs(touch.pageY - touch.startY);
+            
+            return this.mapDelta(deltaX, deltaY);
+          },
+          
+          mouseDown: function(evt) {
+            this._mouseStart = { x: evt.pageX, y: evt.pageY };
+            return YES;
+          },
+          
+          mouseUp: function(evt) {
+            var couldBe = this.mapDelta(Math.abs(evt.pageX-this._mouseStart.x), Math.abs(evt.pageY-this._mouseStart.y));
+            if (couldBe.tap) this.tap();
+          },
+          
+          touchStart: function(touch) {
+            return YES;
+          },
+          
+          touchEnd: function(touch) {
+            var couldBe = this.mapTouch(touch);
+            if (couldBe.tap) this.tap();
+          },
+          
+          tap: function() {
+            Hedwig.sendAction("toggleToolbar");
+          },
+          
+          
+          contentView: SC.ScrollView.design({
+            borderStyle: SC.BORDER_NONE,
+            contentView: SC.StaticContentView.design({
+              contentBinding: "Hedwig.articleController.contents",
+              contentDidChange: function() {
+                sc_super();
+                this.invokeLater("processContent", 1);
+              }.observes("content"),
+            
+              processContent: function() {
+                var d = this.$("a.demo").forEach(function(x) {
+                  x.outerHTML = Hedwig.articleController.replacementFor(x.getAttribute("href"));
+                }, this);
+              },
+              touchStart: function(touch) { this.mouseDown(touch); },
+              mouseDown: function(evt) {
+                evt.preventDefault();
+              
+                var el = document.elementFromPoint(evt.pageX, evt.pageY), demoNode = null;
+                while (el) {
+                  if (SC.$(el).hasClass("sc-view")) break;
+                  if (SC.$(el).hasClass("hedwig-demo")) {
+                    demoNode = el;
+                    break;
+                  }
+                  el = el.parentNode;
+                }
+              
+                if (demoNode) {
+                  Hedwig.sendAction("openDemo", demoNode.getAttribute("href"));
+                  return YES;
+                }
+                
+              }
+            })
           })
         })
+        
+        
+        
       })
-      
     })
   })
 

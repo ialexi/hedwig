@@ -15,6 +15,11 @@ Hedwig.articleController = SC.ObjectController.create(
   contentBinding: "Hedwig.guideBrowserController.selection",
   contentBindingDefault: SC.Binding.single(),
   
+  toolbarShouldShow: YES,
+  toggleToolbar: function() {
+    this.set("toolbarShouldShow", !this.get("toolbarShouldShow"));
+  },
+  
   demoFor: function(href) {
     if (this.get("demos")) return this.get("demos")[href];
     return "";

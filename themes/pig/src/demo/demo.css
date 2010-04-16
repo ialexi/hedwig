@@ -1,0 +1,22 @@
+@view(sc-view).demo {
+  background: none;
+  .middle { display:none}
+  .top-left-edge { display:none}
+  .top-right-edge { display:none}
+  .top-edge { display:none}
+  .bottom-left-edge { display:none}
+  .bottom-right-edge { display:none}
+  .bottom-edge { display:none}
+  .left-edge { display:none}
+  .right-edge { display:none}
+}
+
+@view(sc-view).demo > .sc-view {
+  -webkit-perspective: 1500;
+  background:none;
+  overflow:visible;
+}
+
+@view(sc-view).demo .sc-view.flippable {
+  -webkit-backface-visibility: hidden;
+}

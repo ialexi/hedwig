@@ -4,5 +4,5 @@
 # ===========================================================================
 
 # Add initial buildfile information here
-config :all, :required => :sproutcore, :theme=>:pig, :url_prefix => "/static/suite/",
+config :all, :required => [:sproutcore, "sproutcore/animation"], :theme=>:pig, :url_prefix => "/static/hedwig/",
   :html5_manifest=> true

@@ -14,5 +14,10 @@ Hedwig.NORMAL = SC.Responder.create({
   
   previousArticle: function() {
     Hedwig.guideBrowserController.selectObject(Hedwig.guideBrowserController.get("previousArticle"));
+  },
+  
+  toggleToolbar: function() {
+    console.error("T");
+    Hedwig.articleController.toggleToolbar();
   }
 });

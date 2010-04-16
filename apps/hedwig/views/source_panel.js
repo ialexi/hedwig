@@ -10,12 +10,13 @@
 
   @extends SC.View
 */
-Hedwig.SourcePanel = SC.PanelPane.extend(
+Hedwig.SourcePanel = SC.PanelPane.extend(SC.Animatable,
 /** @scope Hedwig.DemoPanel.prototype */ {
   defaultResponder: Hedwig,
   layout: { top: 0, bottom: 0, width: 768, centerX: 0 },
   contentView: null,
   theme: "pig",
+  
   contentView: SC.WorkspaceView.design({
     topToolbar: SC.ToolbarView.design({
       layout: { top: 0, height: 44, left: 0, right: 0 },
