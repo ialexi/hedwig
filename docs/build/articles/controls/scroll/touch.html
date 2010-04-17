@@ -89,4 +89,35 @@
 </head><body><div class="header"><a href="../../../index.html" class="img"><img src="../../../resources/logo.png" /></a><a href="../../../index.html" class="here">Documentation
 </a><a href="../../../reference/index.html" class="item">SproutCore Reference
 </a></div><div class="content"><h1>ScrollView Touch Support</h1>
+
+<p>SproutCore's ScrollView comes with built-in support for touch-based
+scrolling, including momentum and bouncing. In addition, it has (somewhat experimental)
+support for scaling.</p>
+
+<p>For many cases, just putting a view inside a ScrollView will "just work". Still, you may want
+to set some settings.</p>
+
+<h2>Bouncing</h2>
+
+<p>By default, ScrollView will <em>always</em> bounce when scrolling vertically, regardless of the
+content's height, but only bounce horizontally <em>if</em> the content is wider than the ScrollView.
+This is controlled by two properties:</p>
+
+<ul>
+<li>alwaysBounceHorizontal, which defaults to NO.</li>
+<li>alwaysBounceVertical, which defaults to YES.</li>
+</ul>
+
+<h2>Scaling</h2>
+
+<p>ScrollView has support for scaling, which you can use through a few properties:</p>
+
+<ul>
+<li>canScale. Specifies whether the content may be scaled. If YES, using two fingers
+(in that classic "pinch gesture") will zoom the content.</li>
+<li>minimumScale: The minimum scale value. Default: 0.25.</li>
+<li>maximumScale: The maximum scale value. Default: 2.0.</li>
+</ul>
+
+<p><a href='touch.js' class='demo'>touch.js</a></p>
 </div><div class="footer"></div></body></html>

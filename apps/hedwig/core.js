@@ -20,8 +20,9 @@ Hedwig = SC.Application.create(
   // of your model data.  You can also set a data source on this store to
   // connect to a backend server.  The default setup below connects the store
   // to any fixtures you define.
-  store: SC.Store.create().from(SC.Record.fixtures)
+  store: SC.Store.create().from(SC.Record.fixtures),
   
-  // TODO: Add global constants or singleton objects needed by your app here.
+  // THIS IS A HACK BECAUSE DOCS CAN'T HAVE IMAGES YET
+  SAMPLE_IMAGE: sc_static("sample_image.jpg")
 
 }) ;
