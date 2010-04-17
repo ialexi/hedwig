@@ -1,0 +1,280 @@
+<html><head><title>Docs
+</title><meta http-equiv: 'Content-Type' content="text/html; charset=utf-8" />
+<style type="text/css">
+  body {
+    font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif;
+    margin: 0px;
+    margin-bottom:1em;
+    font-family: sans-serif;
+    font-size: 10px;
+    line-height:1.2;
+  }
+  
+  .content { font-size: 14px; }
+  
+  code {
+    font-family: Monaco, Inconsolata, Courier, fixed-width;
+    font-size: 12px;
+  }
+  
+  pre code {
+    margin-right: 1em;
+    border: 1px solid #a0b0a0;
+    overflow-y: hidden;
+    overflow-x: auto;
+    background: #f5f9f5;
+    display:block;
+    padding: 1em;
+  }
+  
+  a { text-decoration: none; color: rgb(50, 50, 155); }
+  
+  
+  .header {
+    background-color: rgb(38, 43, 50);
+    height: 60px;
+    padding-top:17px;
+    padding-bottom:17px;
+    padding-left:2em;
+  }
+  
+  .header a.img {
+    float: left;
+  }
+  
+  .header .here {
+    float:left;
+    margin-top:27px;
+    margin-left:5px;
+    color: rgb(200, 255, 200);
+    font-size: 25px;
+  }
+  
+  .header span.here {
+    margin-top:34px;
+    font-size:15px;
+    color: white;
+  }
+  
+  .header a.item {
+    float:right;
+    margin-top: 34px;
+    margin-right:10px;
+    color: white;
+    font-size:15px;
+  }
+  
+  .header a.item:hover {
+    text-decoration: underline;
+  }
+  
+  .content {
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+  
+  img { margin-left: auto; margin-right: auto; display: block; }
+  
+  
+  h1, h2, h3 { color: rgb(100, 155, 100); }
+  
+  code .class { color: rgb(0, 0, 150); }
+  /*code .variable { color: rgb(10, 70, 10); }*/
+  code .comment { color: rgb(100, 150, 200); }
+  code .string { color: rgb(0, 100, 10); }
+  code .number { color: rgb(0, 0, 255); }
+  code .keyword, code .this { color: rgb(25, 110, 25); font-weight: bold; }
+</style>
+</head><body><div class="header"><a href="../../index.html" class="img"><img src="../../resources/logo.png" /></a><a href="../../index.html" class="here">Documentation
+</a><a href="../../reference/index.html" class="item">SproutCore Reference
+</a></div><div class="content"><h1>Touch Events</h1>
+
+<p>SproutCore now supports multitouch.</p>
+
+<p>Views ought to implement four methods to support touch:</p>
+
+<ul>
+<li><code class='syntax js'><span class="variable">touchStart</span></code></li>
+<li><code class='syntax js'><span class="variable">touchEnd</span></code></li>
+<li><code class='syntax js'><span class="variable">touchCancelled</span></code></li>
+<li><code class='syntax js'><span class="variable">touchesDragged</span></code></li>
+</ul>
+
+<p>The methods are what they sound like. Really.</p>
+
+<p>So, understanding that, why do three start with <code class='syntax js'><span class="variable">touch</span></code>-, and one starts with <code class='syntax js'><span class="variable">touches</span></code>-? There is
+indeed a very logical and important reason: the ones with names starting with <code class='syntax js'><span class="variable">touch</span></code> deal
+with single touches at a time. The one starting with "touches" deals with potentially multiple touches.</p>
+
+<h2>Finding the Touch Responder</h2>
+
+<p>When a user first touches the screen, a touch responder for that touch is found. The touch responder
+is the view that receives all further touch events for that touch, such as touchesDragged, touchEnd,
+and touchCancelled.</p>
+
+<p>The process is simple. First, it finds out what view the touch was targeted at originally. Then it
+does some special stuff (which we'll discuss under 'Capturing Touch') for special views like <code>SC.ScrollView</code>s. 
+Finally, it starts at the target view and works up the view tree until it finds a view that <em>accepts</em> the touch.
+This view becomes the touch responder for the touch, and will receive further events 
+(<code class='syntax js'><span class="variable">touchStart</span></code>, <code class='syntax js'><span class="variable">touchesDragged</span></code>, and <code class='syntax js'><span class="variable">touchCancelled</span></code>);</p>
+
+<h1>Accepting the Touch: touchStart</h1>
+
+<p>To accept a touch, a view must return <code class='syntax js'><span class="class">YES</span></code> from <code class='syntax js'><span class="variable">touchStart</span></code>.</p>
+
+<p>How does a view know if it wants to accept the touch? You are possibly familiar with <code class='syntax js'><span class="variable">mouseDown</span></code>'s signature:</p>
+
+<pre><code class='syntax js'><span class="variable">mouseDown</span>: <span class="keyword">function</span>(<span class="variable">evt</span>) {
+</code></pre>
+
+<p>With <code class='syntax js'><span class="variable">mouseDown</span></code>, you can decide whether or not to accept the touch based on, for instance, the <code class='syntax js'><span class="variable">pageX</span></code> and <code class='syntax js'><span class="class">Y</span></code>
+of the mouse.</p>
+
+<p>touchStart's signature is slightly different:</p>
+
+<pre><code class='syntax js'><span class="variable">touchStart</span>: <span class="keyword">function</span>(<span class="variable">touch</span>) {
+</code></pre>
+
+<p><code class='syntax js'><span class="variable">touchStart</span></code>, instead of being passed the raw event, is passed an <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code> object. </p>
+
+<h2>Tip: set acceptsMultitouch to YES to track multiple touches</h2>
+
+<p>By default, views will only receive <code class='syntax js'><span class="variable">touchStart</span></code> for the <em>first</em> finger to touch them,
+and touchEnd for the <em>last</em> finger to lift from them. This is to make it simpler to
+handle views such as buttons, which don't need to track multiple touches.</p>
+
+<p>To track multiple touches, set your view's <code class='syntax js'><span class="variable">acceptsMultitouch</span></code> property to <code class='syntax js'><span class="class">YES</span></code>.</p>
+
+<h2>SC.Touch</h2>
+
+<p>SC.Touch represents the touch from the time the user puts their finger on the screen until the time they lift it.</p>
+
+<p>The touch object acts like an event object in many ways. It has many other useful things, as well:</p>
+
+<ul>
+<li><code class='syntax js'><span class="variable">pageX</span></code> and <code class='syntax js'><span class="variable">pageY</span></code> for the touch</li>
+<li><code class='syntax js'><span class="variable">event</span></code>: if in an event cycle, this contains the event. Otherwise, it is <code class='syntax js'><span class="variable">undefined</span></code>.</li>
+<li><code class='syntax js'><span class="variable">preventDefault</span></code>: if the touch is connected with an event, this calls <code class='syntax js'><span class="variable">preventDefault</span>()</code> on the event.</li>
+<li><code class='syntax js'><span class="variable">touchesForView</span>(<span class="variable">view</span>)</code>: when supplied a view, will find all touches that the view is the
+touch responder for. It is a CoreSet; to get an array, call <code class='syntax js'>.<span class="variable">toArray</span></code> on the result.</li>
+</ul>
+
+<p>Note: If you call <code class='syntax js'><span class="variable">touchesForView</span>(<span class="this">this</span>)</code>, the touch supplied to <code class='syntax js'><span class="variable">touchStart</span></code> will not be in the set,
+as the view has not accepted it yet.</p>
+
+<h1>Tracking Movement: touchesDragged</h1>
+
+<p><code class='syntax js'><span class="variable">touchesDragged</span></code> will be called on a touch's touch responder every time a touch 
+(or multiple touches) moves. Unlike <code class='syntax js'><span class="variable">touchStart</span></code>, <code class='syntax js'><span class="variable">touchEnd</span></code>, and <code class='syntax js'><span class="variable">touchCancelled</span></code>, which are
+called once per touch, <code class='syntax js'><span class="variable">touchesDragged</span></code> is called once per event cycle, and can be called
+with multiple touches.</p>
+
+<p><code class='syntax js'><span class="variable">touchesDragged</span></code> signature is:</p>
+
+<pre><code class='syntax js'><span class="variable">touchesDragged</span>: <span class="keyword">function</span>(<span class="variable">evt</span>, <span class="variable">touches</span>) {
+</code></pre>
+
+<p><code class='syntax js'><span class="variable">evt</span></code> is relatively standard, except for the following:</p>
+
+<ul>
+<li><code class='syntax js'><span class="variable">pageX</span></code> and <code class='syntax js'><span class="variable">pageY</span></code> are set to the <code class='syntax js'><span class="variable">pageX</span></code> and <code class='syntax js'><span class="variable">pageY</span></code> of the first touch</li>
+<li>the event has a <code class='syntax js'><span class="variable">touchesForView</span></code> method (though you probably won't use it–see "touches")</li>
+</ul>
+
+<p>In addition to the event, the CoreSet of touches for the view (that is, for which the view
+is touch responder) is provided (this is why you don't have to call <code class='syntax js'><span class="variable">touchesForView</span></code>).
+It is a CoreSet of <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code> objects (the same as if you called <code class='syntax js'><span class="variable">touchesForView</span></code>).</p>
+
+<h1>Ending Touches: touchEnd</h1>
+
+<p>Do I really need to explain? Like <code class='syntax js'><span class="variable">touchStart</span></code>, it is passed an <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code> object. This touch will
+not be in the set of touches for the view, because it has ended.</p>
+
+<h1>Cancelling Touches: touchCancelled</h1>
+
+<p>Basically, <code class='syntax js'><span class="variable">touchCancelled</span></code> is like <code class='syntax js'><span class="variable">touchEnd</span></code>, except it occurs when the touch was cancelled for
+some other reason. For instance, if a button receives <code class='syntax js'><span class="variable">touchCancelled</span></code>, it should make the button
+stop being active, but should <em>not</em> trigger the button's action.</p>
+
+<h1>Giving Up Touches</h1>
+
+<p>Why would you want to give up a touch? Imagine that your control is inside a <code class='syntax js'><span class="class">SC</span>.<span class="class">ScrollView</span></code>:
+if the touch moves too much, perhaps it should be considered a scroll, rather than an
+action for your control.</p>
+
+<p>From touchesDragged, you would give up touch responder status through a line like this:</p>
+
+<pre><code class='syntax js'><span class="variable">someTouch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">someTouch</span>.<span class="variable">nextTouchResponder</span>);
+</code></pre>
+
+<p>The touch's nextTouchResponder is the responder that is the <em>parent</em> touch responder; through
+devious trickery (see <em>Capturing Touches</em>), ScrollView receives touch responder status <em>before</em>
+other views; further, it doesn't just hand touch responder status to the target view (your view)--
+it adds the responder to a stack of touch responders for the touch, so the responders can easily
+return to their parent responder (which is what you do with the above line of code.)</p>
+
+<p>Remember, though, that touchesDragged is called with a set of touches. It is really easy
+to change the responder for all of the touches simultaneously, should you wish to do so:</p>
+
+<pre><code class='syntax js'><span class="variable">touches</span>.<span class="variable">forEach</span>(<span class="keyword">function</span>(<span class="variable">touch</span>){
+  <span class="variable">touch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>);
+});
+</code></pre>
+
+<p>Perhaps you want to pass control only if the responder is scrollable:</p>
+
+<pre><code class='syntax js'><span class="keyword">if</span> (<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span> &amp;&amp; <span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>.<span class="variable">isScrollable</span>) {
+    <span class="variable">touch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>);
+}
+</code></pre>
+
+<p>You can also stack your touch responder on so that child views may easily return control back
+to your view:</p>
+
+<pre><code class='syntax js'><span class="variable">touch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>, <span class="class">YES</span>); <span class="comment">// YES as shouldStack argument</span>
+</code></pre>
+
+<p><strong>If your view is no longer in the touch responder stack, touchCancelled will be called upon it.</strong>
+This means that, if shouldStack is YES (and as such the view was not removed), no touchCancelled
+would be called; on the other hand, if you were returning control to the original view (returning to
+the scroll view, for example), touchCancelled will be called.</p>
+
+<p>Also note that, when touchEnd occurs, it will trigger touchEnd only for the main touchResponder; all
+other responders will get touchCancelled.</p>
+
+<h1>Advanced: Capturing Touches</h1>
+
+<p>Implementing a Scroll view? You'll need to capture the touch before the target view gets it.</p>
+
+<p>This is because Scroll views have some subtle quirks. For instance, a touch should not pass
+through to the actual target until a split-second has passed&emdash;this is to prevent flicker should
+the user decide to scroll rather than touch the target. Also, it needs to add itself to the
+touch responder stack <em>before</em> the target view, so that the target view can hand control back
+simply as discussed above.</p>
+
+<p>The first part—capturing the touch—is simple. Before starting at the target view and working its
+way up to the root calling touchStart, SproutCore's touch events go the opposite direction, starting
+at the root and working their way down to the target, calling a method named captureTouch:</p>
+
+<pre><code class='syntax js'><span class="variable">captureTouch</span>: <span class="keyword">function</span>(<span class="variable">touch</span>) {
+</code></pre>
+
+<p>If the view returns YES, the touchStart event will be sent directly to it.</p>
+
+<p>You could then use invokeLater to wait that split-second. But then what? You don't actually
+know what the target view should be. What you need is to start at the original target, and
+do the whole working up to it calling captureTouch and work down from it calling touchStart
+thing—but this time, starting from your own view, rather than the root. </p>
+
+<p>Thankfully, you can do this in one line of code:</p>
+
+<pre><code class='syntax js'><span class="variable">touch</span>.<span class="variable">captureTouch</span>(<span class="this">this</span>, <span class="class">YES</span>); <span class="comment">// the YES means stack, which I'm guessing you'd want to do</span>
+<span class="comment">// so that the new view can easily pass control back to this...</span>
+<span class="comment">// ... but you may know better than me</span>
+</code></pre>
+
+<p>If the view returns the event back to you, your view will begin getting touchesDragged events and
+will receive touchEnd when the touch ends (you will not receive another touchStart event, however). 
+Otherwise, your view will receive a touchCancelled when the touch ends.</p>
+</div><div class="footer"></div></body></html>
