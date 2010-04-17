@@ -9,10 +9,12 @@ Hedwig.NORMAL = SC.Responder.create({
   },
   
   nextArticle: function() {
+    if (!Hedwig.guideBrowserController.get("hasNextArticle")) return;
     Hedwig.guideBrowserController.selectObject(Hedwig.guideBrowserController.get("nextArticle"));
   },
   
   previousArticle: function() {
+    if (!Hedwig.guideBrowserController.get("hasPreviousArticle")) return;
     Hedwig.guideBrowserController.selectObject(Hedwig.guideBrowserController.get("previousArticle"));
   },
   

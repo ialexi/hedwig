@@ -26,8 +26,9 @@ Hedwig.mainPage = SC.Page.design({
       masterView: SC.WorkspaceView.design({
         topToolbar: null,
         contentView: SC.ScrollView.design({
+          classNames: ["desk"],
           contentView: SC.SourceListView.design({
-            classNames: ["desk"]  ,
+            classNames: ["desk"],
             contentBinding: "Hedwig.guideBrowserController.arrangedObjects",
             selectionBinding: "Hedwig.guideBrowserController.selection",
             contentValueKey: "title"
@@ -35,7 +36,7 @@ Hedwig.mainPage = SC.Page.design({
         })
       }),
       
-      detailView: SC.View.design({
+      detailView: SC.View.design(Hedwig.TouchHelper, {
         classNames: ["paper-view"],
         theme: "paper",
         childViews: "contentView topToolbar".w(),
@@ -114,137 +115,61 @@ Hedwig.mainPage = SC.Page.design({
           
         }),
         
-        contentView: SC.View.design({
-          childViews: "contentView".w(),
+        contentView: Hedwig.ArticleView.design({
           
-          /**
-            touchGestures: Gestures dealing with single touches.
-          */
-          touchGestures: {
-            "tap": { minX: 0, maxX: 3 },
-            "drag": {minX: 5, maxX: 20},
-            "swipe": { minX: 20 },
-            "RELEASE": { minY: 20 }
-          },
+        }),
+        
+        
+        _dragOffset: 0,
+        _reposition: function() {
+          this.get("layer").style.webkitTransform = "translate3d(" + this._dragOffset + "px,0px,0px)";
+        },
+        
+        
+        captureTouch: function() {
+          return YES;
+        },
+        
+        touchStart: function(touch) {
+          this._ownedTouch = NO;
+
+          this._startDragOffset = this._dragOffset;  
           
-          captureTouch: function() {
-            return YES;
-          },
-          
-          /**
-            Maps a delta to gestures 
-          */
-          mapDelta: function(deltaX, deltaY) {
-            var key, gesture, gestures = this.get("touchGestures"), inGesture;
-            var ret = {};
-            
-            // loop through and evaluate
-            for (key in gestures) {
-              gesture = this.touchGestures[key]; inGesture = YES;
-              
-              if ("minX" in gesture && deltaX < gesture.minX) inGesture = NO;
-              if ("minY" in gesture && deltaY < gesture.minY) inGesture = NO;
-              if ("maxX" in gesture && deltaX > gesture.maxX) inGesture = NO;
-              if ("maxY" in gesture && deltaY > gesture.maxY) inGesture = NO;
-              
-              ret[key] = inGesture;
-            }
-            
-            return ret;            
-          },
-          
-          /**
-            Finds out what gestures this touch could qualify for
-          */
-          mapTouch: function(touch) {
-            // calculate deltaX/Y (should we cache our own versions, by any chance?)
-            var deltaX = Math.abs(touch.pageX - touch.startX),
-                deltaY = Math.abs(touch.pageY - touch.startY);
-            
-            return this.mapDelta(deltaX, deltaY);
-          },
-          
-          mouseDown: function(evt) {
-            this._mouseStart = { x: evt.pageX, y: evt.pageY };
-            return YES;
-          },
-          
-          mouseUp: function(evt) {
-            var couldBe = this.mapDelta(Math.abs(evt.pageX-this._mouseStart.x), Math.abs(evt.pageY-this._mouseStart.y));
-            if (couldBe.tap) this.tap();
-          },
-          
-          touchStart: function(touch) {
-            return YES;
-          },
-          
-          touchesDragged: function(evt, touches) {
-            touches.forEach(function(touch){
-              var couldBe = this.mapTouch(touch);
-              if (couldBe.RELEASE) {
-                touch.captureTouch(this, YES);
-              }
-            }, this);
-          },
-          
-          touchEnd: function(touch) {
+          return YES;
+        },
+        
+        touchesDragged: function(evt, touches) {
+          touches.forEach(function(touch){
             var couldBe = this.mapTouch(touch);
-            if (couldBe.tap) {
-              // first, try to see if anyone else wants it
+            if (couldBe.RELEASE && !this._ownedTouch) {
               touch.captureTouch(this, YES);
-              
-              if (touch.touchResponder && touch.touchResponder !== this) touch.end();
-              if (touch.touchResponder === this || !touch.touchResponder) {
-                // otherwise, do what we want
-                this.tap();
+              return;
+            } else if (couldBe.drag || couldBe.swipe) {
+              /*
+              var deltaX = touch.pageX - touch.startX, v = 0, m = (deltaX < 0 ? -1 : 1);
+              for (var i = 0, da = Math.ceil(Math.abs(deltaX) / 10); da > i; i++) {
+                v += m * 10 * Math.pow(0.96, i);
               }
+              this._dragOffset = this._startDragOffset + v;
+              this._reposition();
+              this._ownedTouch = YES;
+              */
             }
-          },
-          
-          tap: function() {
-            Hedwig.sendAction("toggleToolbar");
-          },
+          }, this);
           
           
-          contentView: SC.ScrollView.design({
-            borderStyle: SC.BORDER_NONE,
-            contentView: SC.StaticContentView.design({
-              contentBinding: "Hedwig.articleController.html",
-              contentDidChange: function() {
-                sc_super();
-                this.invokeLater("processContent", 1);
-              }.observes("content"),
-            
-              processContent: function() {
-                var d = this.$("a.demo").forEach(function(x) {
-                  x.outerHTML = Hedwig.articleController.replacementFor(x.getAttribute("href"));
-                }, this);
-              },
-              touchStart: function(touch) { this.mouseDown(touch); },
-              mouseDown: function(evt) {
-                evt.preventDefault();
-              
-                var el = document.elementFromPoint(evt.pageX, evt.pageY), demoNode = null;
-                while (el) {
-                  if (SC.$(el).hasClass("sc-view")) break;
-                  if (SC.$(el).hasClass("hedwig-demo")) {
-                    demoNode = el;
-                    break;
-                  }
-                  el = el.parentNode;
-                }
-              
-                if (demoNode) {
-                  Hedwig.sendAction("openDemo", demoNode.getAttribute("href"));
-                  return YES;
-                }
-                
-              }
-            })
-          })
-        })
+        },
         
-        
+        touchEnd: function(touch) {
+          var couldBe = this.mapTouch(touch);
+          if (this._ownedTouch) {
+
+          } else if (couldBe.tap) {
+            // first, try to see if anyone else wants it
+            touch.captureTouch(this, YES);
+            if (touch.touchResponder && touch.touchResponder !== this) touch.end();
+          }
+        }
         
       })
     })

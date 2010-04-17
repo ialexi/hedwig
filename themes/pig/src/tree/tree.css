@@ -1,6 +1,10 @@
-@view(sc-collection-view.sc-list-view.sc-source-list).desk {
+@view(sc-scroll-view).desk {
   background: sprite("bg.png" repeat-y);
+}
+
+@view(sc-collection-view.sc-list-view.sc-source-list).desk {
   z-index: 0;
+  background: none;
   -webkit-transform: translate3d(0px,0px,0px);
 }
 
