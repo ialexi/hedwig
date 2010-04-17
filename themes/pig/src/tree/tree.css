@@ -1,5 +1,5 @@
 @view(sc-scroll-view).desk {
-  background: sprite("bg.png" repeat-y);
+  background: sprite("bg.jpg" repeat-y);
 }
 
 @view(sc-collection-view.sc-list-view.sc-source-list).desk {

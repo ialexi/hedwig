@@ -89,4 +89,119 @@
 </head><body><div class="header"><a href="../../index.html" class="img"><img src="../../resources/logo.png" /></a><a href="../../index.html" class="here">Documentation
 </a><a href="../../reference/index.html" class="item">SproutCore Reference
 </a></div><div class="content"><h1>Touch Events</h1>
+
+<p>SproutCore's touch events have a few great features:</p>
+
+<ul>
+<li>Multiple views can receive touches simultaneously.</li>
+<li>A single view can receive multiple touches.</li>
+<li>A view can capture touches before allowing them to pass through to children.</li>
+<li>Child views can release touches back to parent views that originally captured them.</li>
+</ul>
+
+<p>We won't get into the last two in this article&emdash;they're quite sophisticated!</p>
+
+<h1>Simple Single-Touch Handling</h1>
+
+<p>You may be familiar with this SC.View method signature if you are familiar with SproutCore:</p>
+
+<pre><code class='syntax js'><span class="variable">mouseDown</span>: <span class="keyword">function</span>(<span class="variable">evt</span>)
+</code></pre>
+
+<p>With <code class='syntax js'><span class="variable">mouseDown</span></code>, you can decide whether or not to accept the mouse event by returning either
+<code class='syntax js'><span class="class">YES</span></code> or <code class='syntax js'><span class="class">NO</span></code>.</p>
+
+<p>Touch events are similar, but work a bit differently:</p>
+
+<pre><code class='syntax js'><span class="variable">touchStart</span>: <span class="keyword">function</span>(<span class="variable">touch</span>)
+</code></pre>
+
+<p>Instead of being passed a raw event, <code class='syntax js'><span class="variable">touchStart</span></code> is passed an <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code> object.
+If you return YES from touchStart, your view will "own" the touch—in SproutCore terms, your
+view will be the <em>touch responder</em>. For more information about what this entails, see
+the "Internals" article. Your view will own the touch until the touch ends.</p>
+
+<p><code class='syntax js'><span class="variable">touchStart</span></code> will be called once for every touch that touches the view.</p>
+
+<p><strong>Note:</strong> By default, views only receive <code class='syntax js'><span class="variable">touchStart</span></code> and touchEnd for a single touch. This is
+a feature intended to make it easier to handle such cases, very similar to Cocoa Touch's <code class='syntax js'><span class="variable">acceptsMultitouch</span></code>
+property—actually, SC.View uses the same property name! See the "Multitouch" article.</p>
+
+<h2>Anatomy of an SC.Touch</h2>
+
+<p>SC.Touch represents the touch from the time the user puts their finger on the screen until the time they lift it.</p>
+
+<p>The touch object acts like an event object in many ways. It has many other useful things, as well:</p>
+
+<ul>
+<li><code class='syntax js'><span class="variable">pageX</span></code> and <code class='syntax js'><span class="variable">pageY</span></code> for the touch</li>
+<li><code class='syntax js'><span class="variable">event</span></code>: if in an event cycle, this contains the event. Otherwise, it is <code class='syntax js'><span class="variable">undefined</span></code>. 
+You will probably never need to access this.</li>
+<li><code class='syntax js'><span class="variable">preventDefault</span></code>: if the touch is connected with an event, this calls <code class='syntax js'><span class="variable">preventDefault</span>()</code> on the event.</li>
+<li><code class='syntax js'><span class="variable">touchesForView</span>(<span class="variable">view</span>)</code>: when supplied a view, will find all touches that the view is the
+touch responder for. It is a CoreSet; to get an array, call <code class='syntax js'>.<span class="variable">toArray</span></code> on the result.</li>
+<li><code class='syntax js'><span class="variable">averagedTouchesForView</span>(<span class="variable">view</span>)</code>: When supplied a view, averages all the touches on that view,
+returning both an average position and an average distance from that position.</li>
+</ul>
+
+<p><strong>Note:</strong> If you call <code class='syntax js'><span class="variable">touchesForView</span>(<span class="this">this</span>)</code> from <code class='syntax js'><span class="variable">touchStart</span></code>, the touch supplied will not be in the set
+returned by <code class='syntax js'><span class="variable">touchesForView</span>(<span class="this">this</span>)</code>: you don't own the touch until you return YES.</p>
+
+<h2>touchEnd</h2>
+
+<p>Knowing when the touch starts is not very useful. At the very least, you will likely want to know when the touch
+ends as well.</p>
+
+<p>It is quite simple:</p>
+
+<pre><code class='syntax js'><span class="variable">touchEnd</span>: <span class="keyword">function</span>(<span class="variable">touch</span>)
+</code></pre>
+
+<p>It works exactly like <code class='syntax js'><span class="variable">touchStart</span></code>. The touch will no longer be in the set of touches for the view,
+so if you call <code class='syntax js'><span class="variable">touch</span>.<span class="variable">touchesForView</span>(<span class="this">this</span>)</code>, you'll only receive any other active touches. If your
+view does not accept multitouch, then the set is guaranteed to have no touches in it—you only receive
+<code class='syntax js'><span class="variable">touchEnd</span></code> for the last touch that ends.</p>
+
+<h2>Tracking Touches</h2>
+
+<p>Tracking touch movement is simple:</p>
+
+<pre><code class='syntax js'><span class="variable">touchesDragged</span>: <span class="keyword">function</span>(<span class="variable">evt</span>, <span class="variable">touches</span>)
+</code></pre>
+
+<p>The <code class='syntax js'><span class="variable">touches</span></code> argument is the set of touches on the view—the same set you get by calling <code class='syntax js'><span class="variable">touchesForView</span>(<span class="this">this</span>)</code>.
+This will have <em>all</em> touches, regardless of whether or not your view accepts multitouch.</p>
+
+<p>If your view does <em>not</em> accept multitouch, then it is even simpler:</p>
+
+<pre><code class='syntax js'><span class="variable">x</span> = <span class="variable">evt</span>.<span class="variable">pageX</span>;
+<span class="variable">y</span> = <span class="variable">evt</span>.<span class="variable">pageY</span>;
+</code></pre>
+
+<h2>Tip: Cross-Platform-iness</h2>
+
+<p>Did you realize that, assuming you don't use the set of view touches or other touch-specific API,
+you can do this:</p>
+
+<pre><code class='syntax js'><span class="variable">mouseDown</span>: <span class="keyword">function</span>(<span class="variable">evt</span>) {
+  <span class="this">this</span>.<span class="variable">touchStart</span>(<span class="variable">evt</span>);
+},
+
+<span class="variable">mouseDragged</span>: <span class="keyword">function</span>(<span class="variable">evt</span>) {
+  <span class="this">this</span>.<span class="variable">touchesDragged</span>(<span class="variable">evt</span>);
+},
+
+<span class="variable">mouseUp</span>: <span class="keyword">function</span>(<span class="variable">evt</span>) {
+  <span class="this">this</span>.<span class="variable">touchEnd</span>(<span class="variable">evt</span>);
+}
+</code></pre>
+
+<p>Of course, you can also redirect touch events to mouse events, but that is not as fun.</p>
+
+<h2>Putting it All Together</h2>
+
+<p>Here is a very simple demo that uses the methods described above to allow the user to move two views
+around the screen:</p>
+
+<p><a href='touch-demo.js' class='demo'>touch-demo.js</a></p>
 </div><div class="footer"></div></body></html>

@@ -1,0 +1,189 @@
+<html><head><title>Docs
+</title><meta http-equiv: 'Content-Type' content="text/html; charset=utf-8" />
+<style type="text/css">
+  body {
+    font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif;
+    margin: 0px;
+    margin-bottom:1em;
+    font-family: sans-serif;
+    font-size: 10px;
+    line-height:1.2;
+  }
+  
+  .content { font-size: 14px; }
+  
+  code {
+    font-family: Monaco, Inconsolata, Courier, fixed-width;
+    font-size: 12px;
+  }
+  
+  pre code {
+    margin-right: 1em;
+    border: 1px solid #a0b0a0;
+    overflow-y: hidden;
+    overflow-x: auto;
+    background: #f5f9f5;
+    display:block;
+    padding: 1em;
+  }
+  
+  a { text-decoration: none; color: rgb(50, 50, 155); }
+  
+  
+  .header {
+    background-color: rgb(38, 43, 50);
+    height: 60px;
+    padding-top:17px;
+    padding-bottom:17px;
+    padding-left:2em;
+  }
+  
+  .header a.img {
+    float: left;
+  }
+  
+  .header .here {
+    float:left;
+    margin-top:27px;
+    margin-left:5px;
+    color: rgb(200, 255, 200);
+    font-size: 25px;
+  }
+  
+  .header span.here {
+    margin-top:34px;
+    font-size:15px;
+    color: white;
+  }
+  
+  .header a.item {
+    float:right;
+    margin-top: 34px;
+    margin-right:10px;
+    color: white;
+    font-size:15px;
+  }
+  
+  .header a.item:hover {
+    text-decoration: underline;
+  }
+  
+  .content {
+    padding-top: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+  
+  img { margin-left: auto; margin-right: auto; display: block; }
+  
+  
+  h1, h2, h3 { color: rgb(100, 155, 100); }
+  
+  code .class { color: rgb(0, 0, 150); }
+  /*code .variable { color: rgb(10, 70, 10); }*/
+  code .comment { color: rgb(100, 150, 200); }
+  code .string { color: rgb(0, 100, 10); }
+  code .number { color: rgb(0, 0, 255); }
+  code .keyword, code .this { color: rgb(25, 110, 25); font-weight: bold; }
+</style>
+</head><body><div class="header"><a href="../../index.html" class="img"><img src="../../resources/logo.png" /></a><a href="../../index.html" class="here">Documentation
+</a><a href="../../reference/index.html" class="item">SproutCore Reference
+</a></div><div class="content"><h1>Multitouch</h1>
+
+<p>Handling single touches is pretty easy&emdash;not that much different from handling
+mouse events. But what about multiple touches?</p>
+
+<h2>Accepting Multiple Touches</h2>
+
+<p>First, you have to tell your view that you do, indeed want to receive multiple
+touches. By default, views only receive single touches. This is because is easier 
+to think in a single-touch model, and most controls only need to track a single touch.</p>
+
+<p>To accept multiple touches, just set the view's <code class='syntax js'><span class="variable">acceptsMultitouch</span></code> property to
+<code class='syntax js'><span class="class">YES</span></code>.</p>
+
+<pre><code class='syntax js'><span class="variable">view</span> = <span class="class">SC</span>.<span class="class">View</span>.<span class="variable">extend</span>({
+  <span class="variable">acceptsMultitouch</span>: <span class="class">YES</span>
+});
+</code></pre>
+
+<h2>Processing the Individual Touches</h2>
+
+<p>Even without the supplied helper function, processing individual touches is relatively
+simple:</p>
+
+<ul>
+<li>You get a separate <code class='syntax js'><span class="variable">touchStart</span></code> for each individual touch.</li>
+<li>You get a separate <code class='syntax js'><span class="variable">touchEnd</span></code> for each individual touch.</li>
+<li>You get one <code class='syntax js'><span class="variable">touchesDragged</span></code> each event cycle for all of your touches put together.</li>
+</ul>
+
+<p>So, detecting individual touches starting and ending is simple. Detecting those touches
+moving is not quite as simple, but still relatively easy.</p>
+
+<p>Remember how <code class='syntax js'><span class="variable">touchesDragged</span></code> works:</p>
+
+<pre><code class='syntax js'><span class="variable">touchesDragged</span>: <span class="keyword">function</span>(<span class="variable">evt</span>, <span class="variable">touches</span>)
+</code></pre>
+
+<p><code class='syntax js'><span class="variable">touches</span></code> is an SC.CoreSet of SC.Touch objects. What can you do with a CoreSet? 
+You can do a couple of things:</p>
+
+<ul>
+<li>Turn it into an array and do whatever.</li>
+<li>Call .forEach to iterate.</li>
+</ul>
+
+<p>But you don't have to use the touches set at all. The <code class='syntax js'><span class="variable">evt</span></code> has some useful properties and methods,
+too:</p>
+
+<ul>
+<li>pageX/pageY: the position of the first touch.</li>
+<li>averagedTouchesForView: a method which returns the averaged touch position
+and the average distance of the touches from that position.</li>
+</ul>
+
+<p><code class='syntax js'><span class="class">SC</span>.<span class="class">ScrollView</span></code>, for instance, makes heavy use of <code class='syntax js'><span class="variable">averagedTouchesForView</span></code>, and never
+directly touches the <code class='syntax js'><span class="variable">touches</span></code> set.</p>
+
+<h2>Averaging Touches</h2>
+
+<p>It is often <em>very</em> useful to average the touches. </p>
+
+<p><code class='syntax js'><span class="variable">averagedTouchesForView</span></code> returns an object with four properties:</p>
+
+<ul>
+<li><strong><code class='syntax js'><span class="variable">x</span></code></strong>: The average X position of the touch.</li>
+<li><strong><code class='syntax js'><span class="variable">y</span></code></strong>: The average Y position of the touch.</li>
+<li><strong><code class='syntax js'><span class="variable">d</span></code></strong>: average distance of the all touches from the average x/y position.</li>
+<li><strong><code class='syntax js'><span class="variable">touchCount</span></code></strong> The number of touches averaged.</li>
+</ul>
+
+<p>You can call <code class='syntax js'><span class="variable">averagedTouchesForView</span></code> on two separate objects: an <code class='syntax js'><span class="class">SC</span>.<span class="class">Event</span></code> object,
+or an <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code> object.</p>
+
+<p>The two work identically but for one important difference: when you call it on <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code>,
+you <em>have the option</em> of telling the touch to add itself to the averaged set. Doing so makes no sense
+in most cases: the touch would just be counted twice! But what about <code class='syntax js'><span class="variable">touchStart</span></code>?</p>
+
+<p>Recall that during <code class='syntax js'><span class="variable">touchStart</span></code>, the view does not yet own the touch. So, <code class='syntax js'><span class="variable">averagedTouchesForView</span></code>
+would not, by default count it.</p>
+
+<pre><code class='syntax js'><span class="comment">// on an event:</span>
+<span class="keyword">var</span> <span class="variable">a</span> = <span class="variable">evt</span>.<span class="variable">averagedTouchesForView</span>(<span class="this">this</span>);
+
+<span class="comment">// on a touch</span>
+<span class="keyword">var</span> <span class="variable">a</span> = <span class="variable">touch</span>.<span class="variable">averagedTouchesForView</span>(<span class="this">this</span>);
+
+<span class="comment">// on a touch, counting the touch itself</span>
+<span class="keyword">var</span> <span class="variable">a</span> = <span class="variable">touch</span>.<span class="variable">averagedTouchesForView</span>(<span class="this">this</span>, <span class="class">YES</span>);
+</code></pre>
+
+<h2>Thinking it Over</h2>
+
+<p>How might you use all of these to produce a good result?</p>
+
+<p>Let's take a simple example: moving and resizing something:</p>
+
+<p><a href='multitouch.js' class='demo'>multitouch.js</a></p>
+</div><div class="footer"></div></body></html>

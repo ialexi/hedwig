@@ -88,11 +88,28 @@
 </style>
 </head><body><div class="header"><a href="../../index.html" class="img"><img src="../../resources/logo.png" /></a><a href="../../index.html" class="here">Documentation
 </a><a href="../../reference/index.html" class="item">SproutCore Reference
-</a></div><div class="content"><h1>A Brief Touch on Touches</h1>
+</a></div><div class="content"><h1>A Brief Touch</h1>
 
-<p>Some text goes here.</p>
+<p>It is very possible to build <em>awesome</em> touch-enabled applications in SproutCore.</p>
 
-<p>Note that links like the below must appear on empty lines with no preceding whitespace.</p>
+<p>But, what makes an awesome touch-enabled application? Sure, it must accept touches,
+but with SproutCore's (constantly growing) touch support, this is now pretty easy:
+many existing interfaces, if built with newer SproutCore varieties, will function fine (or mostly fine),
+on both larger-screened touch devices (such as iPad) and the traditional desktop environment.</p>
 
-<p><a href='touch-demo.js' class='demo'>touch-demo.js</a></p>
+<p>But there are many differences between desktop and touch platforms:</p>
+
+<ul>
+<li><strong>Precision.</strong> Touches are less precise than clicks. To compensate, controls should be larger.</li>
+<li><strong>Performance.</strong> Touch-based devices tend to be slow (for now). To get around this just takes 
+some elbow grease: there are many techniques to speed things up... many of which SproutCore will
+handle for you.</li>
+<li><strong>Animation.</strong> Lack of animation looks okay on desktop (even if animation is cool)... but on
+touch devices, non-animated interfaces look strange: touch is so much more realistic than mouse,
+but sudden changes without transitions are not realistic at all.</li>
+<li><strong>Coolness.</strong> Touch-based interfaces are cool. That is all.</li>
+</ul>
+
+<p>In this guide, we go over each of these&emdash;except for the last, which is rather vague; you'll have to figure out
+your own meaning of "coolness".</p>
 </div><div class="footer"></div></body></html>

@@ -16,6 +16,23 @@ var Dot = SC.View.extend({
       width: t.ourStart.width,
       height: t.ourStart.height
     });
+  },
+  
+  touchEnd: function() {
+    // actually, we don't need to do anything here...
+  },
+  
+  // and now, redirect mouse events :)
+  mouseDown: function(evt) {
+    this.touchStart(evt);
+  },
+  
+  mouseDragged: function(evt) {
+    this.touchesDragged(evt);
+  },
+  
+  mouseUp: function(evt) {
+    this.touchEnd(evt);
   }
 });
 var MyExampleView = SC.View.extend({

@@ -4,7 +4,7 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
   
   mouseDown: function(evt) {
     this._mouseStart = { x: evt.pageX, y: evt.pageY };
-    return YES;
+    return NO;
   },
   
   mouseUp: function(evt) {
@@ -52,9 +52,9 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
     borderStyle: SC.BORDER_NONE,
     contentView: SC.StaticContentView.design({
       contentBinding: "Hedwig.articleController.html",
-      contentDidChange: function() {
+      didUpdateLayer: function() {
         sc_super();
-        this.invokeLater("processContent", 1);
+        this.processContent();
       }.observes("content"),
     
       processContent: function() {
@@ -65,7 +65,7 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
       touchStart: function(touch) { return this.mouseDown(touch); },
       
       mouseDown: function(evt) {
-        evt.preventDefault();
+        
       
         var el = document.elementFromPoint(evt.pageX, evt.pageY), demoNode = null;
         while (el) {
@@ -79,6 +79,7 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
       
         if (demoNode) {
           Hedwig.sendAction("openDemo", demoNode.getAttribute("href"));
+          evt.preventDefault();
           return YES;
         }
         
