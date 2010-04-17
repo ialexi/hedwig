@@ -1,14 +1,16 @@
 /**
-   This is our test view. It will capture a touch, and, after one second,
-   pass it through to the child view. Depending on the shouldStack property,
-   it will stack while passing.
-   
-   In this example, the top view stacks, the bottom one does not.
+  This is similar to the "Capturing" example.
+  
+  In fact, the outer view is identical. Only the inner view has changed.
+  As we can't pass control back without stacking, this demo _only_ includes
+  the stacking method.
+  
+  The inner view, just like the outer view, passes control back after a specific
+  time period.
 */
 var Tester = SC.View.extend({
   backgroundColor: "white",
   
-  shouldStack: NO,
   captureTouch: function() {
     return YES;
   },
@@ -26,7 +28,7 @@ var Tester = SC.View.extend({
     // if our touch hasn't changed in the meantime
     if (touch === this._hasTouch) {
       // we'll pass the touch along.
-      touch.captureTouch(this, this.get("shouldStack"));
+      touch.captureTouch(this, YES);
     }
   },
   
@@ -44,12 +46,26 @@ var Tester = SC.View.extend({
   inner: SC.View.design({
     layout: { left: 50, top: 50, right: 50, bottom: 50 },
     backgroundColor: "gray",
-    touchStart: function() {
+    touchStart: function(touch) {
+      this._touch = touch;
       this.get("layer").style.backgroundColor = "blue";
+      this.invokeLater("releaseTouch", 1000, touch);
       return YES;
     },
     
-    touchEnd: function() {
+    releaseTouch: function(touch) {
+      if (touch === this._touch) {
+        touch.makeTouchResponder(touch.nextTouchResponder);
+      }
+    },
+    
+    touchEnd: function(touch) {
+      this._touch = NO;
+      this.get("layer").style.backgroundColor = "gray";
+    },
+    
+    touchCancelled: function(touch) {
+      this._touch = NO;
       this.get("layer").style.backgroundColor = "gray";
     }
     
@@ -59,15 +75,10 @@ var Tester = SC.View.extend({
 
 var MyExampleView = SC.View.extend({
   backgroundColor: "#aaa",
-  childViews: "stacks doesNot".w(),
-  stacks: Tester.extend({
+  childViews: "demo".w(),
+  demo: Tester.extend({
     layout: { top: 10, left: 10, width: 200, height: 200 },
     shouldStack: YES
-  }),
-  
-  doesNot: Tester.extend({
-    layout: { top: 230, left: 10, width: 200, height: 200 },
-    shouldStack: NO    
   })
 });
 

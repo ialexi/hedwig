@@ -117,7 +117,7 @@
 </code></pre>
 
 <p>Instead of being passed a raw event, <code class='syntax js'><span class="variable">touchStart</span></code> is passed an <code class='syntax js'><span class="class">SC</span>.<span class="class">Touch</span></code> object.
-If you return YES from touchStart, your view will "own" the touch—in SproutCore terms, your
+If you return YES from touchStart, your view will "own" the touch&emdash;in SproutCore terms, your
 view will be the <em>touch responder</em>. For more information about what this entails, see
 the "Internals" article. Your view will own the touch until the touch ends.</p>
 
@@ -125,7 +125,7 @@ the "Internals" article. Your view will own the touch until the touch ends.</p>
 
 <p><strong>Note:</strong> By default, views only receive <code class='syntax js'><span class="variable">touchStart</span></code> and touchEnd for a single touch. This is
 a feature intended to make it easier to handle such cases, very similar to Cocoa Touch's <code class='syntax js'><span class="variable">acceptsMultitouch</span></code>
-property—actually, SC.View uses the same property name! See the "Multitouch" article.</p>
+property&emdash;actually, SC.View uses the same property name! See the "Multitouch" article.</p>
 
 <h2>Anatomy of an SC.Touch</h2>
 
@@ -159,7 +159,7 @@ ends as well.</p>
 
 <p>It works exactly like <code class='syntax js'><span class="variable">touchStart</span></code>. The touch will no longer be in the set of touches for the view,
 so if you call <code class='syntax js'><span class="variable">touch</span>.<span class="variable">touchesForView</span>(<span class="this">this</span>)</code>, you'll only receive any other active touches. If your
-view does not accept multitouch, then the set is guaranteed to have no touches in it—you only receive
+view does not accept multitouch, then the set is guaranteed to have no touches in it&emdash;you only receive
 <code class='syntax js'><span class="variable">touchEnd</span></code> for the last touch that ends.</p>
 
 <h2>Tracking Touches</h2>
@@ -169,7 +169,7 @@ view does not accept multitouch, then the set is guaranteed to have no touches i
 <pre><code class='syntax js'><span class="variable">touchesDragged</span>: <span class="keyword">function</span>(<span class="variable">evt</span>, <span class="variable">touches</span>)
 </code></pre>
 
-<p>The <code class='syntax js'><span class="variable">touches</span></code> argument is the set of touches on the view—the same set you get by calling <code class='syntax js'><span class="variable">touchesForView</span>(<span class="this">this</span>)</code>.
+<p>The <code class='syntax js'><span class="variable">touches</span></code> argument is the set of touches on the view&emdash;the same set you get by calling <code class='syntax js'><span class="variable">touchesForView</span>(<span class="this">this</span>)</code>.
 This will have <em>all</em> touches, regardless of whether or not your view accepts multitouch.</p>
 
 <p>If your view does <em>not</em> accept multitouch, then it is even simpler:</p>

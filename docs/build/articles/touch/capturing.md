@@ -61,6 +61,11 @@ What happens next depends on whether or not you told it to stack your view:
 
 What Does It Look Like?
 -----------------------
+In this example, we have two boxes, each containing an inner box. The outer boxes
+capture touches, and only pass them to the inner box after a delay. The top box stacks,
+the other one does not; this causes, as described above, a difference in when touchEnd/Cancelled
+is called on the outer boxes.
+
 {{demo:sc|capturing.js}}
 
 

@@ -89,4 +89,46 @@
 </head><body><div class="header"><a href="../../index.html" class="img"><img src="../../resources/logo.png" /></a><a href="../../index.html" class="here">Documentation
 </a><a href="../../reference/index.html" class="item">SproutCore Reference
 </a></div><div class="content"><h1>Releasing</h1>
+
+<p>Why would you want to give up a touch? Imagine that your control is inside a <code class='syntax js'><span class="class">SC</span>.<span class="class">ScrollView</span></code>:
+if the touch moves too much, perhaps it should be considered a scroll, rather than an
+action for your control.</p>
+
+<p>From touchesDragged, you would give up touch responder status through a line like this:</p>
+
+<pre><code class='syntax js'><span class="variable">someTouch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">someTouch</span>.<span class="variable">nextTouchResponder</span>);
+</code></pre>
+
+<p>The touch's nextTouchResponder is the responder that is the <em>parent</em> touch responder; through
+devious trickery (see <em>Capturing Touches</em>), ScrollView receives touch responder status <em>before</em>
+other views; further, it doesn't just hand touch responder status to the target view (your view)--
+it adds the responder to a stack of touch responders for the touch, so the responders can easily
+return to their parent responder (which is what you do with the above line of code.)</p>
+
+<p>Remember, though, that touchesDragged is called with a set of touches. It is really easy
+to change the responder for all of the touches simultaneously, should you wish to do so:</p>
+
+<pre><code class='syntax js'><span class="variable">touches</span>.<span class="variable">forEach</span>(<span class="keyword">function</span>(<span class="variable">touch</span>){
+  <span class="variable">touch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>);
+});
+</code></pre>
+
+<p>Perhaps you want to pass control only if the responder is scrollable:</p>
+
+<pre><code class='syntax js'><span class="keyword">if</span> (<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span> &amp;&amp; <span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>.<span class="variable">isScrollable</span>) {
+    <span class="variable">touch</span>.<span class="variable">makeTouchResponder</span>(<span class="variable">touch</span>.<span class="variable">nextTouchResponder</span>);
+}
+</code></pre>
+
+<p><code class='syntax js'><span class="variable">touchCancelled</span></code> will be called on your view automatically.</p>
+
+<h2>What Does It Look Like?</h2>
+
+<p>In this example, there is a single white box, containing a gray inner box. When you press
+on the inner box, the outer box will capture the touch first. After a delay, it re-captures
+by calling captureTouch, and the inner view receives it. This is just like the "Capturing" demo.</p>
+
+<p>However, the inner view, after a second, will release it back.</p>
+
+<p><a href='releasing.js' class='demo'>releasing.js</a></p>
 </div><div class="footer"></div></body></html>

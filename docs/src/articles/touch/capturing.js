@@ -19,6 +19,7 @@ var Tester = SC.View.extend({
     
     // in one second, we'll pass the touch along.
     this.invokeLater("beginContentTouches", 1000, touch);
+    return YES;
   },
   
   beginContentTouches: function(touch) {
@@ -45,6 +46,7 @@ var Tester = SC.View.extend({
     backgroundColor: "gray",
     touchStart: function() {
       this.get("layer").style.backgroundColor = "blue";
+      return YES;
     },
     
     touchEnd: function() {
