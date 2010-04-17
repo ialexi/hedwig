@@ -43,11 +43,10 @@ Hedwig.mainPage = SC.Page.design({
         // update master hidden status since we are doing this manually...
         masterIsHidden: NO,
         masterIsHiddenDidChange: function() { 
-          console.error("MHDC");
           this.topToolbar.set("masterIsHidden", this.get("masterIsHidden"));
         }.observes("masterIsHidden"),
         
-        topToolbar: SC.ToolbarView.design(SC.Animatable, SC.FlowedLayout, {
+        topToolbar: SC.ToolbarView.design(SC.Animatable, {
           masterIsHidden: NO,
           
           layout: { top: 0, right: 0, left: 0, height: 44 },
@@ -80,10 +79,9 @@ Hedwig.mainPage = SC.Page.design({
           }.observes("isShowing"),
           
           autoResize: NO,
-          flowPadding: {top:0,bottom:0,right:10,left:10},
-          childViews: "title previous guide space next".w(),
+          childViews: "title previous guide next".w(),
           previous: SC.ButtonView.design({
-            layout: { width: 44, height: 44 },
+            layout: { left: 10, top: 0, width: 44, height: 44 },
             theme: "icon",
             icon: "previous",
             isEnabled: NO,
@@ -91,16 +89,15 @@ Hedwig.mainPage = SC.Page.design({
             action: "previousArticle"
           }),
           guide: SC.ButtonView.design({
-            layout: { width: 100, height: 44 },
+            layout: { left: 64, width: 100, height: 44 },
             title: "Guide",
             theme: "chromeless",
             isVisible: NO,
             action: "toggleMasterPicker",
             isVisibleBinding: ".parentView.masterIsHidden"
           }),
-          space: SC.View.design({ isSpacer:YES }),
           next: SC.ButtonView.design({
-            layout: { width: 44, height: 44 },
+            layout: { right: 10, top: 0, width: 44, height: 44 },
             theme: "icon",
             icon: "next",
             action: "nextArticle",
@@ -127,11 +124,11 @@ Hedwig.mainPage = SC.Page.design({
             "tap": { minX: 0, maxX: 3 },
             "drag": {minX: 5, maxX: 20},
             "swipe": { minX: 20 },
-            "RELEASE": { minY: 10 }
+            "RELEASE": { minY: 20 }
           },
           
           captureTouch: function() {
-            return NO;
+            return YES;
           },
           
           /**
@@ -181,9 +178,27 @@ Hedwig.mainPage = SC.Page.design({
             return YES;
           },
           
+          touchesDragged: function(evt, touches) {
+            touches.forEach(function(touch){
+              var couldBe = this.mapTouch(touch);
+              if (couldBe.RELEASE) {
+                touch.captureTouch(this, YES);
+              }
+            }, this);
+          },
+          
           touchEnd: function(touch) {
             var couldBe = this.mapTouch(touch);
-            if (couldBe.tap) this.tap();
+            if (couldBe.tap) {
+              // first, try to see if anyone else wants it
+              touch.captureTouch(this, YES);
+              
+              if (touch.touchResponder && touch.touchResponder !== this) touch.end();
+              if (touch.touchResponder === this || !touch.touchResponder) {
+                // otherwise, do what we want
+                this.tap();
+              }
+            }
           },
           
           tap: function() {

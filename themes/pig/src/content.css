@@ -3,6 +3,14 @@
   border: 1px solid gray;
 }
 
-h1 {
-  color: rgb(70,70,140);
+@view(sc-static-content-view) {
+  font-size: 1.2em;
+  h1 {
+    font-size: 1.5em;
+  }
+
+
+  h1, h2, h3, h4 {
+    color: rgb(80,120,170);
+  }
 }

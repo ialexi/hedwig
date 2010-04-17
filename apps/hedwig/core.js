@@ -3,7 +3,7 @@
 // Copyright: ©2010 My Company, Inc.
 // ==========================================================================
 /*globals Hedwig */
-SC.LOG_TOUCH_EVENTS = YES;
+
 /** @namespace
 
   My cool new app.  Describe your application.

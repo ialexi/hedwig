@@ -17,7 +17,6 @@ Hedwig.NORMAL = SC.Responder.create({
   },
   
   toggleToolbar: function() {
-    console.error("T");
     Hedwig.articleController.toggleToolbar();
   }
 });

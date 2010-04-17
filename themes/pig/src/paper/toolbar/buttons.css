@@ -2,17 +2,21 @@
 @view(sc-button-view) label.sc-button-label {
   margin-top: -11px;
   font-size: 16px;
-  color: #bbb;
+  color: #999;
 }
 
 @view(sc-button-view).active label.sc-button-label {
-  color: #777;
+  color: #555;
 }
 @end
 
 @theme(icon)
+@view(sc-button-view).disabled {
+  opacity: .2;
+}
+
 @view(sc-button-view) {
-  opacity: .3;
+  opacity: .5;
 }
 
 @view(sc-button-view).active {
