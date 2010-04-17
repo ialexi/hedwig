@@ -89,4 +89,37 @@
 </head><body><div class="header"><a href="../../../index.html" class="img"><img src="../../../resources/logo.png" /></a><a href="../../../index.html" class="here">Documentation
 </a><a href="../../../reference/index.html" class="item">SproutCore Reference
 </a></div><div class="content"><h1>ButtonView Touch Support</h1>
+
+<p>ButtonView currently supports only a single touch (any other touches will be ignored). 
+This is fine: why would you want to consider two touches in a button press?</p>
+
+<p>However, it does not simply relay the touches to <code class='syntax js'><span class="variable">mouseDown</span></code> and <code class='syntax js'><span class="variable">mouseUp</span></code>.</p>
+
+<p>Instead, it calculates the distance of the main touch (<code class='syntax js'><span class="variable">evt</span></code>'s <code class='syntax js'><span class="variable">pageX</span></code> and <code class='syntax js'><span class="variable">pageY</span></code>)
+from the button itself. This makes it easier to for a user to press a button while, for instance,
+moving their finger.</p>
+
+<p>This is all done for you automatically. Here's a simple demo:
+<a href='touch-button.js' class='demo'>touch-button.js</a></p>
+
+<h2>Ace 2.0</h2>
+
+<p>Ace 2.0 supports several button sizes. In addition, it is capable of <em>automatically picking</em>
+a size based on the size of your control. And best of all, it <em>centers</em> the button image
+vertically in the space you allocate. This allows you to, for instance, make a button 44px
+tall, but have the image only be 30px.</p>
+
+<p>You may use these options for <code class='syntax js'><span class="variable">controlSize</span></code>:</p>
+
+<ul>
+<li>SC.SMALL_CONTROL_SIZE. 18px.</li>
+<li>SC.REGULAR_CONTROL_SIZE. 24px.</li>
+<li>SC.HUGE_CONTROL_SIZE. 30px.</li>
+<li>SC.JUMBO_CONTROL_SIZE. 44px.</li>
+<li>SC.AUTO_CONTROL_SIZE. Automatically figures a control size (largest that will fit), but
+throws a warning if you don't have "height" set and it has to calculate the size.</li>
+<li>SC.CALCULATED_CONTROL_SIZE. Like AUTO_CONTROL_SIZE, but calculates it.</li>
+</ul>
+
+<p><a href='button-size.js' class='demo'>button-size.js</a></p>
 </div><div class="footer"></div></body></html>
