@@ -30,6 +30,6 @@ Hedwig.articleController = SC.ObjectController.create(
   },
   
   replacementFor: function(href) {
-    return "<div class='hedwig-demo' href='" + href + "' style=''></div>";
+    return "<div class='hedwig-demo' href='" + href + "' style=''>Example</div>";
   }
 }) ;

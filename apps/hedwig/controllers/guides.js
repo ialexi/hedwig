@@ -16,13 +16,6 @@ Hedwig.guidesController = SC.ObjectController.create(
   
   currentGuide: null,
   loadGuide: function(path) {
-    // quick hack to make things work offline, properly.
-    var g = window.localStorage["hedwig-current-guide"];
-    if (g) {
-      this.set("currentGuide", g);
-    }
-    
-    
     SC.Request.getUrl(path).json().notify(this, "didLoadGuide").send();
   },
   
@@ -30,7 +23,6 @@ Hedwig.guidesController = SC.ObjectController.create(
     // obviously I have no error handling right now. Did I mention I'm in a bit of a hurry?
     // /me crosses fingers
     if (SC.ok(response)) {
-      window.localStorage["hedwig-current-guide"] = response.get("body");
       this.set("currentGuide", response.get("body"));
     }
   }
