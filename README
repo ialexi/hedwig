@@ -1,0 +1,18 @@
+DEPLOYMENT
+===========
+
+In short, you run sc-build.
+
+However.
+
+Please note that, if your version of sc-build creates manifests, you should either:
+
+- REALLY REALLY test that app with the manifest. Why? 
+  Because I've had some problems with them. The content sometimes does not load
+  when in standalone app mode on iPad, for instance.
+  
+  You may have to add it as a specific resource; it is in
+  resources/guide/touch.json, so you'd basically copy the sample_image.jpg
+  line in the manifest and change "sample_image" to "guide/touch.json"
+  
+- Do not use the manifest.
