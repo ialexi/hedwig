@@ -27,5 +27,5 @@ But there are many differences between desktop and touch platforms:
   but sudden changes without transitions are not realistic at all.
 - **Coolness.** Touch-based interfaces are cool. That is all.
 
-In this guide, we go over each of these—except for the last, which is rather vague; you'll have to figure out
+In this guide, we go over each of these, except for the last, which is rather vague; you'll have to figure out
 your own meaning of "coolness".

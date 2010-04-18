@@ -16,7 +16,9 @@ Hedwig.guidesController = SC.ObjectController.create(
   
   currentGuide: null,
   loadGuide: function(path) {
-    SC.Request.getUrl(path).json().notify(this, "didLoadGuide").send();
+    // we are short-circuiting for now
+    this.set("currentGuide", Hedwig.GUIDE_CONTENT);
+    //SC.Request.getUrl(path).json().notify(this, "didLoadGuide").send();
   },
   
   didLoadGuide: function(response) {
