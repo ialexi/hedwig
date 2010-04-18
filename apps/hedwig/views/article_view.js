@@ -59,9 +59,11 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
       }.observes("content"),
     
       processContent: function() {
-        var d = this.$("a.demo").forEach(function(x) {
-          x.outerHTML = Hedwig.articleController.replacementFor(x.getAttribute("href"));
-        }, this);
+        var d = this.$("a.demo").each(function() {
+          console.error(this.getAttribute("href"));
+          this.innerHTML = Hedwig.articleController.replacementFor(this.getAttribute("href"));
+          this.setAttribute("href", "#");
+        });
       },
       touchStart: function(touch) { return this.mouseDown(touch); },
       
