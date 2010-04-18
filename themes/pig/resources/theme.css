@@ -92,7 +92,9 @@
   -webkit-user-select: text;
   font-size: 1.2em;
 }
-.sc-theme .sc-view.ace.light.pig.sc-static-content-view .hedwig-demo {
+.sc-theme .sc-view.ace.light.pig.sc-static-content-view a.demo { text-decoration: none; }
+.sc-theme .sc-view.ace.light.pig.sc-static-content-view a.demo .hedwig-demo {
+  text-decoration: none;
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f0f0f0), to(#d9d9d9));
   color: #464646;
   text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.7);
@@ -107,7 +109,7 @@
   -webkit-border-radius: 7px;
   -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
-.sc-theme .sc-view.ace.light.pig.sc-static-content-view .hedwigh-demo:active { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dedede), to(#c2c2c2)); }
+.sc-theme .sc-view.ace.light.pig.sc-static-content-view a.demo .hedwig-demo:active { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dedede), to(#c2c2c2)); }
 .sc-theme .sc-view.ace.light.pig.sc-static-content-view h1 { font-size: 1.5em; }
 .sc-theme .sc-view.ace.light.pig.sc-static-content-view h1 { color: #5078aa; }
 .sc-theme .sc-view.ace.light.pig.sc-static-content-view h2 { color: #5078aa; }

@@ -60,7 +60,6 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
     
       processContent: function() {
         var d = this.$("a.demo").each(function() {
-          console.error(this.getAttribute("href"));
           this.innerHTML = Hedwig.articleController.replacementFor(this.getAttribute("href"));
           this.setAttribute("href", "#");
         });
