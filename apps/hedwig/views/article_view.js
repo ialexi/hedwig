@@ -51,6 +51,13 @@ Hedwig.ArticleView = SC.View.extend(Hedwig.TouchHelper, {
   contentView: SC.ScrollView.design({
     borderStyle: SC.BORDER_NONE,
     
+    htmlContent: "",
+    htmlContentBinding: "Hedwig.articleController.html",
+    htmlContentDidChange: function() {
+      console.error("CDC");
+      this.scrollTo(0,1);
+    }.observes("htmlContent"),
+    
     contentView: SC.StaticContentView.design({
       contentBinding: "Hedwig.articleController.html",
       didUpdateLayer: function() {
