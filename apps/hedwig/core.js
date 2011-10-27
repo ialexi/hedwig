@@ -7,7 +7,7 @@
 /** @namespace
 
   My cool new app.  Describe your application.
-  
+
   @extends SC.Object
 */
 Hedwig = SC.Application.create(
@@ -21,7 +21,7 @@ Hedwig = SC.Application.create(
   // connect to a backend server.  The default setup below connects the store
   // to any fixtures you define.
   store: SC.Store.create().from(SC.Record.fixtures),
-  
+
   // THIS IS A HACK BECAUSE DOCS CAN'T HAVE IMAGES YET
   SAMPLE_IMAGE: sc_static("sample_image.jpg")
 

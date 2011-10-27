@@ -1,7 +1,7 @@
 @view(sc-static-content-view) {
   -webkit-user-select: text;
   font-size: 1.2em;
-  
+
   a.demo {
     text-decoration: none;
     .hedwig-demo {
@@ -25,7 +25,7 @@
       background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DEDEDE), to(#C2C2C2));
     }
   }
-  
+
   h1 {
     font-size: 1.5em;
   }
@@ -34,12 +34,12 @@
   h1, h2, h3, h4 {
     color: rgb(80,120,170);
   }
-  
+
   code {
     font-family: Monaco, Inconsolata, Courier, fixed-width;
     font-size: 12px;
   }
-  
+
   pre code {
     margin-right: 1em;
     border: 1px solid #a0b0a0;
@@ -48,10 +48,10 @@
     background: #f5f9f5;
     display:block;
     padding: 1em;
-  } 
-  
+  }
+
   code .class { color: rgb(0, 0, 150); }
-  
+
   /*code .variable { color: rgb(10, 70, 10); }*/
   code .comment { color: rgb(100, 150, 200); }
   code .string { color: rgb(0, 100, 10); }

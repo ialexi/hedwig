@@ -19,29 +19,29 @@ Hedwig.DemoPanel = SC.PanelPane.extend(SC.Animatable,
     },
     style: {opacity: 0.0 }
   }),
-  
-  transitions: { 
-    transform: { 
-      duration: 0.5, 
+
+  transitions: {
+    transform: {
+      duration: 0.5,
       timing: SC.Animatable.TRANSITION_EASE_IN_OUT
     },
-    opacity: { 
-      duration: 0.5, 
+    opacity: {
+      duration: 0.5,
       timing: SC.Animatable.TRANSITION_EASE_IN_OUT,
-      action: function(){ 
+      action: function(){
         if (this.style.opacity === 0) this._call_when_done();
-      } 
+      }
     }
   },
   style: { opacity: 0.0, transform: "scale3d(.1,.1,1)" },
   layout: { width: 250, height: 480 },
   theme: "popover",
-  
+
   append: function() {
     sc_super();
     this.invokeLater("sizeUp", 1);
   },
-  
+
   sizeUp: function() {
     this.adjust({
       opacity: 1,
@@ -49,7 +49,7 @@ Hedwig.DemoPanel = SC.PanelPane.extend(SC.Animatable,
     });
     this.modalPane.adjust("opacity", 0.50);
   },
-  
+
   remove: function() {
     this._call_when_done = arguments.callee.base;
     this.adjust({
@@ -58,9 +58,9 @@ Hedwig.DemoPanel = SC.PanelPane.extend(SC.Animatable,
     });
     this.modalPane.adjust("opacity", 0);
   },
-  
+
   classNames: "demo".w(),
-  
+
   defaultResponder: Hedwig,
   layout: { top: 0, bottom: 0, width: 768, centerX: 0 },
   contentView: null,
@@ -73,21 +73,21 @@ Hedwig.DemoPanel.generateWithView = function(view) {
       childViews: "front back".w(),
       init: function() {
         sc_super();
-        
+
         if (SC.Animatable.enableCSS3DTransforms) {
           this.back.flip(180, YES);
         } else {
           this.back.set("isVisible", NO);
         }
       },
-      
-      nowShowingBinding: "Hedwig.demoController.nowShowing",      
+
+      nowShowingBinding: "Hedwig.demoController.nowShowing",
       nowShowing: "none",
       flip: function() {
         if (this.get("nowShowing") == "back") this.set("nowShowing", "front");
         else this.set("nowShowing", "back");
       },
-      
+
       nowShowingDidChange: function() {
         var ns = this.get("nowShowing");
         if (ns == "front") {
@@ -108,7 +108,7 @@ Hedwig.DemoPanel.generateWithView = function(view) {
           }
         }
       }.observes("nowShowing"),
-      
+
       back: SC.WorkspaceView.design(SC.Animatable, {
         classNames: "flippable".w(),
         transitions: {
@@ -127,8 +127,8 @@ Hedwig.DemoPanel.generateWithView = function(view) {
           });
           if (d) this.enableAnimation();
         },
-        
-        
+
+
         topToolbar: SC.ToolbarView.design({
           layout: { top: 0, height: 44, left: 0, right: 0 },
           childViews: "close source".w(), // not "closed" source-- close & source
@@ -158,7 +158,7 @@ Hedwig.DemoPanel.generateWithView = function(view) {
 
         })
       }),
-      
+
       front: SC.WorkspaceView.design(SC.Animatable, {
         classNames: "flippable".w(),
         transitions: {

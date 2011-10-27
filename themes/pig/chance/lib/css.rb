@@ -13,25 +13,25 @@ class CSSParser
     @images = {  }
     @static_images = { }
   end
-  
+
   def parse
     # first, read file
     file = File.new(@directory + "/" + @file)
     contents = ""
     file.each {|line| contents += line}
     @contents = contents
-    
+
     self.parse_rules
     self.parse_sprites
   end
-  
+
   def parse_rules
     # parses @theme "name"
     # and @view(viewname)
     contents = @contents
-    
+
     view_rule = /(@view|@theme|@end)(\(\s*(["']{2}|["'].*?[^\\]"|[^\s]+)\s*\))?;?/
-    
+
     theme_name = @theme
     theme_parts = [theme_name]
     contents.gsub!(view_rule) do |match|
@@ -52,43 +52,43 @@ class CSSParser
         ""
       end
     end
-    
+
     boxshadow_rule = /\-sc\-box\-shadow:\s*([^;]*)/
     contents.gsub!(boxshadow_rule) do |match|
       "-moz-box-shadow: " + $1 + "; -webkit-box-shadow: " + $1 + "; box-shadow: " + $1
     end
-    
+
     borderradius_rule = /\-sc\-border\-radius:\s*([^;]*)/
     contents.gsub!(borderradius_rule) do |match|
       "-moz-border-radius: " + $1 + "; -webkit-border-radius: " + $1 + "; border-radius: " + $1
     end
-    
+
     borderradius_topleft_rule = /\-sc\-border\-top\-left\-radius:\s*([^;]*)/
     contents.gsub!(borderradius_topleft_rule) do |match|
       "-moz-border-radius-topleft: " + $1 + "; -webkit-border-top-left-radius: " + $1 + "; border-top-left-radius: " + $1
     end
-    
+
     borderradius_topright_rule = /\-sc\-border\-top\-right\-radius:\s*([^;]*)/
     contents.gsub!(borderradius_topright_rule) do |match|
       "-moz-border-radius-topright: " + $1 + "; -webkit-border-top-right-radius: " + $1 + "; border-top-right-radius: " + $1
     end
-    
+
     borderradius_bottomleft_rule = /\-sc\-border\-bottom\-left\-radius:\s*([^;]*)/
     contents.gsub!(borderradius_bottomleft_rule) do |match|
       "-moz-border-radius-bottomleft: " + $1 + "; -webkit-border-bottom-left-radius: " + $1 + "; border-bottom-left-radius: " + $1
     end
-    
+
     borderradius_bottomright_rule = /\-sc\-border\-bottom\-right\-radius:\s*([^;]*)/
     contents.gsub!(borderradius_bottomright_rule) do |match|
       "-moz-border-radius-bottomright: " + $1 + "; -webkit-border-bottom-right-radius: " + $1 + "; border-bottom-right-radius: " + $1
     end
-    
+
     @contents = contents
   end
-  
+
   def parse_sprites
     contents = @contents
-    
+
     # A whole regexp would include: ([\s,]+(repeat-x|repeat-y))?([\s,]+\[(.*)\])?
     # but let's keep it simple:
     sprite_directive = /(sprite|static_url)\(\s*(["']{2}|["'].*?[^\\]['"]|[^\s]+)(.*?)\s*\)/
@@ -96,26 +96,26 @@ class CSSParser
       # prepare replacement string
       replace_with_prefix = "sprite_for("
       replace_with_suffix = ")"
-      
+
       # get name and add to replacement
       type = $1
       image_name = $2
       args = $3
       image_name = $2.sub(/^["'](.*)["']$/, '\1')
-      
-      result_hash = { 
+
+      result_hash = {
         :path => File.expand_path(@directory + "/" + image_name), :image => image_name,
         :repeat => "no-repeat", :rect => [], :target => "",
         :anchor => :none, :clear => false, :nosprite => (type == "static_url")
       }
-      
+
       # Replacement string is made to be replaced again in a second pass
       # first pass generates manifest, second pass actually puts sprite info in.
-      
+
       # match: key words (Separated by whitespace) or rects.
       args.scan(/(\[.*?\]|[^\s]+)/) {|r|
         arg = $1.strip
-        
+
         if arg.match(/^\[/)
           # A rectangle specifying a slice
           full_rect = []
@@ -127,9 +127,9 @@ class CSSParser
           elsif params.length == 4
             full_rect = params.map {|e| e.to_i}
           else
-            
+
           end
-          
+
           result_hash[:rect] = full_rect
         else
           # a normal keyword, probably.
@@ -146,17 +146,17 @@ class CSSParser
           end
         end
       }
-      
+
       image_key = result_hash[:repeat] + ":" + result_hash[:rect].join(",") + ":" + result_hash[:path]
       replace_with = replace_with_prefix + image_key + replace_with_suffix
       @images[image_key] = result_hash
-      
+
       replace_with
     end
-    
+
     @contents = contents
   end
-  
+
   def generate
     contents = @contents
     contents = contents.gsub(/sprite_for\(\s*(["']{2}|["'].*?[^\\]["']|.*?)\s*\)/) {|match|
@@ -164,7 +164,7 @@ class CSSParser
       result = ""
       if @images.key? key
         image = @images[key]
-        
+
         # if it is not sprited or we are not doing data urls, we use the url template.
         if image[:nosprite] or not @config[:use_data_url]
           result = (@config[:url_template] % [image[:sprite_path]])
@@ -173,14 +173,14 @@ class CSSParser
           data = image[:image].to_blob
           data = Base64.encode64(data)
           data = data.gsub(/[ \n]/, '')
-        
+
           result = "url(\'data:image/png;base64,#{data}\')"
         end
-        
+
         # Only put repeat data if not sprited
         if not image[:nosprite]
           result += " #{image[:repeat]}"
-          
+
           if not @config[:use_data_url]
             if image[:anchor] == :none
               result += image[:sprite_x] == 0 ? " #{image[:sprite_x]}" : " -#{image[:sprite_x]}px"
@@ -190,11 +190,11 @@ class CSSParser
             result += image[:sprite_y] == 0 ? " #{image[:sprite_y]}" : " -#{image[:sprite_y]}px"
           end
         end
-        
+
       else
         puts "Did not find image with key: ", key
       end
-      
+
       result
     }
     return contents
