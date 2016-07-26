@@ -5,15 +5,15 @@ Hedwig.DEMO = SC.Responder.create({
   didBecomeFirstResponder: function() {
     Hedwig.demoController.openDemo();
   },
-  
+
   willLoseFirstResponder: function() {
     Hedwig.demoController.closeDemo();
   },
-  
+
   closeDemo: function() {
     Hedwig.makeFirstResponder(Hedwig.NORMAL);
   },
-  
+
   showSource: function() {
     Hedwig.makeFirstResponder(Hedwig.SOURCE);
   }

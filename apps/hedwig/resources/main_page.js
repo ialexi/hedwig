@@ -12,16 +12,16 @@
 Hedwig.guidePath = sc_static("guide/touch.json");
 
 Hedwig.mainPage = SC.Page.design({
-  
+
   mainPane: SC.MainPane.design({
     defaultResponder: Hedwig.NORMAL,
-    
+
     theme: "pig",
     childViews: 'docs'.w(),
-    
+
     docs: SC.MasterDetailView.design({
       autoHideMaster: YES,
-      
+
       // have to use workspace for master because it renders the popover (that we do need)
       masterView: SC.WorkspaceView.design({
         topToolbar: null,
@@ -35,23 +35,23 @@ Hedwig.mainPage = SC.Page.design({
           })
         })
       }),
-      
+
       detailView: SC.View.design(Hedwig.TouchHelper, {
         classNames: ["paper-view"],
         theme: "paper",
         childViews: "contentView topToolbar".w(),
-        
+
         // update master hidden status since we are doing this manually...
         masterIsHidden: NO,
-        masterIsHiddenDidChange: function() { 
+        masterIsHiddenDidChange: function() {
           this.topToolbar.set("masterIsHidden", this.get("masterIsHidden"));
         }.observes("masterIsHidden"),
-        
+
         topToolbar: SC.ToolbarView.design(SC.Animatable, {
           masterIsHidden: NO,
-          
+
           layout: { top: 0, right: 0, left: 0, height: 44 },
-          
+
           style: {
             display: "block",
             opacity: 0.9
@@ -60,7 +60,7 @@ Hedwig.mainPage = SC.Page.design({
             display: 0.2,
             opacity: 0.1
           },
-          
+
           isShowing: YES,
           isShowingBinding: "Hedwig.articleController.toolbarShouldShow",
           isShowingDidChange: function() {
@@ -78,7 +78,7 @@ Hedwig.mainPage = SC.Page.design({
               }).updateStyle();
             }
           }.observes("isShowing"),
-          
+
           autoResize: NO,
           childViews: "title previous guide next".w(),
           previous: SC.ButtonView.design({
@@ -105,39 +105,39 @@ Hedwig.mainPage = SC.Page.design({
             isEnabled: NO,
             isEnabledBinding: "Hedwig.guideBrowserController.hasNextArticle"
           }),
-          
+
           title: SC.LabelView.design({
             useAbsoluteLayout: YES,
             layout: { left: 0, right: 0, centerY: 0, height: 20 },
             textAlign: SC.ALIGN_CENTER,
             valueBinding: "Hedwig.articleController.title"
           })
-          
+
         }),
-        
+
         contentView: Hedwig.ArticleView.design({
-          
+
         }),
-        
-        
+
+
         _dragOffset: 0,
         _reposition: function() {
           this.get("layer").style.webkitTransform = "translate3d(" + this._dragOffset + "px,0px,0px)";
         },
-        
-        
+
+
         captureTouch: function() {
           return YES;
         },
-        
+
         touchStart: function(touch) {
           this._ownedTouch = NO;
 
-          this._startDragOffset = this._dragOffset;  
-          
+          this._startDragOffset = this._dragOffset;
+
           return YES;
         },
-        
+
         touchesDragged: function(evt, touches) {
           touches.forEach(function(touch){
             var couldBe = this.mapTouch(touch);
@@ -156,10 +156,10 @@ Hedwig.mainPage = SC.Page.design({
               */
             }
           }, this);
-          
-          
+
+
         },
-        
+
         touchEnd: function(touch) {
           var couldBe = this.mapTouch(touch);
           if (this._ownedTouch) {
@@ -170,7 +170,7 @@ Hedwig.mainPage = SC.Page.design({
             if (touch.touchResponder && touch.touchResponder !== this) touch.end();
           }
         }
-        
+
       })
     })
   })

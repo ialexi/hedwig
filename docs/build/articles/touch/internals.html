@@ -9,14 +9,14 @@
     font-size: 10px;
     line-height:1.2;
   }
-  
+
   .content { font-size: 14px; }
-  
+
   code {
     font-family: Monaco, Inconsolata, Courier, fixed-width;
     font-size: 12px;
   }
-  
+
   pre code {
     margin-right: 1em;
     border: 1px solid #a0b0a0;
@@ -26,10 +26,10 @@
     display:block;
     padding: 1em;
   }
-  
+
   a { text-decoration: none; color: rgb(50, 50, 155); }
-  
-  
+
+
   .header {
     background-color: rgb(38, 43, 50);
     height: 60px;
@@ -37,11 +37,11 @@
     padding-bottom:17px;
     padding-left:2em;
   }
-  
+
   .header a.img {
     float: left;
   }
-  
+
   .header .here {
     float:left;
     margin-top:27px;
@@ -49,13 +49,13 @@
     color: rgb(200, 255, 200);
     font-size: 25px;
   }
-  
+
   .header span.here {
     margin-top:34px;
     font-size:15px;
     color: white;
   }
-  
+
   .header a.item {
     float:right;
     margin-top: 34px;
@@ -63,22 +63,22 @@
     color: white;
     font-size:15px;
   }
-  
+
   .header a.item:hover {
     text-decoration: underline;
   }
-  
+
   .content {
     padding-top: 1em;
     padding-left: 2em;
     padding-right: 2em;
   }
-  
+
   img { margin-left: auto; margin-right: auto; display: block; }
-  
-  
+
+
   h1, h2, h3 { color: rgb(100, 155, 100); }
-  
+
   code .class { color: rgb(0, 0, 150); }
   /*code .variable { color: rgb(10, 70, 10); }*/
   code .comment { color: rgb(100, 150, 200); }
@@ -114,9 +114,9 @@ is the view that receives all further touch events for that touch, such as touch
 and touchCancelled.</p>
 
 <p>The process is simple. First, it finds out what view the touch was targeted at originally. Then it
-does some special stuff (which we'll discuss under 'Capturing Touch') for special views like <code>SC.ScrollView</code>s. 
+does some special stuff (which we'll discuss under 'Capturing Touch') for special views like <code>SC.ScrollView</code>s.
 Finally, it starts at the target view and works up the view tree until it finds a view that <em>accepts</em> the touch.
-This view becomes the touch responder for the touch, and will receive further events 
+This view becomes the touch responder for the touch, and will receive further events
 (<code class='syntax js'><span class="variable">touchStart</span></code>, <code class='syntax js'><span class="variable">touchesDragged</span></code>, and <code class='syntax js'><span class="variable">touchCancelled</span></code>);</p>
 
 <h1>Accepting the Touch: touchStart</h1>
@@ -165,7 +165,7 @@ as the view has not accepted it yet.</p>
 
 <h1>Tracking Movement: touchesDragged</h1>
 
-<p><code class='syntax js'><span class="variable">touchesDragged</span></code> will be called on a touch's touch responder every time a touch 
+<p><code class='syntax js'><span class="variable">touchesDragged</span></code> will be called on a touch's touch responder every time a touch
 (or multiple touches) moves. Unlike <code class='syntax js'><span class="variable">touchStart</span></code>, <code class='syntax js'><span class="variable">touchEnd</span></code>, and <code class='syntax js'><span class="variable">touchCancelled</span></code>, which are
 called once per touch, <code class='syntax js'><span class="variable">touchesDragged</span></code> is called once per event cycle, and can be called
 with multiple touches.</p>
@@ -275,6 +275,6 @@ thing&emdash;but this time, starting from your own view, rather than the root. <
 </code></pre>
 
 <p>If the view returns the event back to you, your view will begin getting touchesDragged events and
-will receive touchEnd when the touch ends (you will not receive another touchStart event, however). 
+will receive touchEnd when the touch ends (you will not receive another touchStart event, however).
 Otherwise, your view will receive a touchCancelled when the touch ends.</p>
 </div><div class="footer"></div></body></html>

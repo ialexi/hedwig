@@ -9,14 +9,14 @@
     font-size: 10px;
     line-height:1.2;
   }
-  
+
   .content { font-size: 14px; }
-  
+
   code {
     font-family: Monaco, Inconsolata, Courier, fixed-width;
     font-size: 12px;
   }
-  
+
   pre code {
     margin-right: 1em;
     border: 1px solid #a0b0a0;
@@ -26,10 +26,10 @@
     display:block;
     padding: 1em;
   }
-  
+
   a { text-decoration: none; color: rgb(50, 50, 155); }
-  
-  
+
+
   .header {
     background-color: rgb(38, 43, 50);
     height: 60px;
@@ -37,11 +37,11 @@
     padding-bottom:17px;
     padding-left:2em;
   }
-  
+
   .header a.img {
     float: left;
   }
-  
+
   .header .here {
     float:left;
     margin-top:27px;
@@ -49,13 +49,13 @@
     color: rgb(200, 255, 200);
     font-size: 25px;
   }
-  
+
   .header span.here {
     margin-top:34px;
     font-size:15px;
     color: white;
   }
-  
+
   .header a.item {
     float:right;
     margin-top: 34px;
@@ -63,22 +63,22 @@
     color: white;
     font-size:15px;
   }
-  
+
   .header a.item:hover {
     text-decoration: underline;
   }
-  
+
   .content {
     padding-top: 1em;
     padding-left: 2em;
     padding-right: 2em;
   }
-  
+
   img { margin-left: auto; margin-right: auto; display: block; }
-  
-  
+
+
   h1, h2, h3 { color: rgb(100, 155, 100); }
-  
+
   code .class { color: rgb(0, 0, 150); }
   /*code .variable { color: rgb(10, 70, 10); }*/
   code .comment { color: rgb(100, 150, 200); }
@@ -122,7 +122,7 @@ what view to hand it back to. Also, what if you had a scroll view <em>within</em
 <h2>Capturing</h2>
 
 <p>Capturing the touch is simple. Before starting at the target view and working its
-way up to the root calling touchStart (the same way all SproutCore events work), 
+way up to the root calling touchStart (the same way all SproutCore events work),
 SproutCore's touch events go the opposite direction, starting at the root and working their way down
 to the target, calling a method named captureTouch:</p>
 
@@ -148,7 +148,7 @@ thing&emdash;but this time, starting from your own view, rather than the root. <
 <ul>
 <li>If stacked, you will receive a touchCancelled when the touch actually ends, unless the
 view which captures the touch hands control back to your view. If it does, you will <em>not</em>
-receive another <code class='syntax js'><span class="variable">touchStart</span></code>, but you <em>will</em> start receiving <code class='syntax js'><span class="variable">touchesDragged</span></code> and 
+receive another <code class='syntax js'><span class="variable">touchStart</span></code>, but you <em>will</em> start receiving <code class='syntax js'><span class="variable">touchesDragged</span></code> and
 will receive a <code class='syntax js'><span class="variable">touchEnd</span></code> when the touch ends.</li>
 <li>If not stacked, your view will receive <code class='syntax js'><span class="variable">touchCancelled</span></code>.</li>
 </ul>

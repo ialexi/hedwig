@@ -13,12 +13,12 @@
 Hedwig.guideBrowserController = SC.TreeController.create(
 /** @scope Hedwig.guideBrowserController.prototype */ {
   contentBinding: "Hedwig.guideController.guideTree",
-  
-  
+
+
   treeItemChildrenKey: "treeItemChildren",
   treeItemIsGrouped: YES,
   treeItemIsExpandedKey: "treeItemIsExpanded",
-  
+
   allowsMultipleSelection: NO,
   allowsEmptySelection: NO,
 
@@ -30,7 +30,7 @@ Hedwig.guideBrowserController = SC.TreeController.create(
   hasPreviousArticle: function() {
     return !!this.get("previousArticle");
   }.property("previousArticle").cacheable(),
-  
+
   hasNextArticle: function() {
     return !!this.get("nextArticle");
   }.property("nextArticle").cacheable(),
@@ -38,10 +38,10 @@ Hedwig.guideBrowserController = SC.TreeController.create(
   previousArticle: function() {
     var ao = this.get("arrangedObjects"), set = this.get("selection").indexSetForSource(ao);
     if (!set) return NO;
-    
+
     var first = set.get("min");
     var indexes = ao.contentGroupIndexes(null, ao);
-    
+
     // now start trying indexes
     var idx = first - 1;
     for (; idx >= 0; idx--) {
@@ -49,14 +49,14 @@ Hedwig.guideBrowserController = SC.TreeController.create(
     }
     return null;
   }.property("selection", "arrangedObjects").cacheable(),
-  
+
   nextArticle: function(){
     var ao = this.get("arrangedObjects"), set = this.get("selection").indexSetForSource(ao);
     if (!set) return;
-    
+
     var last = set.get("max");
     var indexes = ao.contentGroupIndexes(null, ao);
-    
+
     // now start trying indexes
     var idx = last, len = ao.get("length");
     for (; idx < len; idx++) {

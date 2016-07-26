@@ -1,7 +1,7 @@
 @view(sc-scroll-view).source {
   background-color: rgb(45, 45, 45);
   -webkit-transform: translate3d(0px,0px,0px);
-  
+
   .sc-container-view {
     -webkit-transform: translate3d(0px,0px,0px);
     .sc-static-content-view {
@@ -16,7 +16,7 @@
   white-space: pre;
   padding: 0px;
   margin: 0px;
-  
+
   .line-numbers {
     text-align: right;
     padding-right: 5px;
@@ -28,22 +28,22 @@
     border-right:1px solid rgb(120,120,120);
     background-color: rgb(25, 25, 25);
     color: #aaa;
-    
+
     span {
       display:block;
     }
   }
-  
+
   .code {
     margin-left: 65px;
     color: rgb(230, 225, 220);
-    
+
     .class { color: rgb(255,255,255); }
     .variable { color: rgb(208,208,255); }
     .comment { color: rgb(188,148,88); font-style: italic; }
     .string { color: rgb(165,194,97); }
     .number { color: rgb(165,194,97); }
-    
+
     .keyword, .this { color: rgb(204, 120, 51); font-weight: bold; }
   }
 }

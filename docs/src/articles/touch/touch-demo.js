@@ -7,30 +7,30 @@ var Dot = SC.View.extend({
     };
     return YES; // or we won't get touchesDragged
   },
-  
+
   touchesDragged: function(evt, touches) {
     var t = this._touch;
-    this.set("layout", { 
+    this.set("layout", {
       left: t.ourStart.x + evt.pageX - t.start.x,
       top: t.ourStart.y + evt.pageY - t.start.y,
       width: t.ourStart.width,
       height: t.ourStart.height
     });
   },
-  
+
   touchEnd: function() {
     // actually, we don't need to do anything here...
   },
-  
+
   // and now, redirect mouse events :)
   mouseDown: function(evt) {
     this.touchStart(evt);
   },
-  
+
   mouseDragged: function(evt) {
     this.touchesDragged(evt);
   },
-  
+
   mouseUp: function(evt) {
     this.touchEnd(evt);
   }
